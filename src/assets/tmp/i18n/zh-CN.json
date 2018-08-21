@@ -64,5 +64,18 @@
   "pro-user": "账户",
   "pro-login": "登录",
   "pro-register": "注册",
-  "pro-register-result": "注册结果"
+  "pro-register-result": "注册结果",
+
+  "sys": "系统管理",
+  "sys_setting": "系统设置",
+  "sys_module": "模块管理",
+  "sys_menu": "菜单管理",
+  "sys_param": "参数设置",
+  "sys_organization": "组织管理",
+  "sys_user": "用户管理",
+  "sys_org": "机构管理",
+  "sys_post": "岗位管理",
+  "sys_privilege": "权限管理",
+  "sys_role": "角色管理",
+  "sys_priviSet": "权限设置"
 }
