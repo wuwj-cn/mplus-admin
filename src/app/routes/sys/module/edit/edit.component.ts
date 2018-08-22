@@ -14,7 +14,7 @@ export class SysModuleEditComponent implements OnInit {
     properties: {
       no: { type: 'string', title: '编号' },
       owner: { type: 'string', title: '姓名', maxLength: 15 },
-      callNo: { type: 'number', title: '调用次数' },
+      callNo: { type: 'string', title: '日期', format: 'date' },
       href: { type: 'string', title: '链接', format: 'uri' },
       description: { type: 'string', title: '描述', maxLength: 140 },
     },

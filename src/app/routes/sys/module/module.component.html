@@ -1,7 +1,12 @@
-<page-header [home]="sys">
+<page-header [autoBreadcrumb]="'false'">
   <ng-template #action>
+    <button nz-button (click)="searchBtnToggle($event)">
+      <span *ngIf="sfHidden">查询</span>
+      <span *ngIf="!sfHidden">隐藏</span>
+    </button>
     <button (click)="add()" nz-button nzType="primary">新建</button>
   </ng-template>
+  
 </page-header>
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>

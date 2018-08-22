@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { SimpleTableColumn, SimpleTableComponent } from '@delon/abc';
 import { SFSchema } from '@delon/form';
+import { SysModuleEditComponent } from './edit/edit.component';
 
 @Component({
   selector: 'app-sys-module',
@@ -11,10 +12,8 @@ export class SysModuleComponent implements OnInit {
   url = `/user`;
   searchSchema: SFSchema = {
     properties: {
-      no: {
-        type: 'string',
-        title: '编号'
-      }
+      no: { type: 'string', title: '编号' },
+      sDate: { type: 'string', ui: { widget: 'date', mode: 'range' } }
     }
   };
   @ViewChild('st') st: SimpleTableComponent;
@@ -26,20 +25,27 @@ export class SysModuleComponent implements OnInit {
     {
       title: '',
       buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
-        // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
+        { text: '查看', click: (item: any) => `/form/${item.id}` },
+        { text: '编辑', type: 'static', component: SysModuleEditComponent, click: 'reload' },
       ]
     }
   ];
 
   constructor(private http: _HttpClient, private modal: ModalHelper) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    
+  }
 
   add() {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+    this.modal
+      .createStatic(SysModuleEditComponent, { i: { id: 0 } })
+      .subscribe(() => this.st.reload());
+  }
+
+  sfHidden = false;
+  searchBtnToggle() {
+    this.sfHidden = !this.sfHidden;
   }
 
 }

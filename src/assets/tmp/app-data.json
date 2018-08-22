@@ -10,10 +10,15 @@
   },
   "menu": [
     {
+      "text": "仪表盘",
+      "i18n": "dashboard",
+      "icon": "anticon antanticon anticon-dashboard",
+      "link": "/dashboard"
+    },
+    {
       "text": "系统管理",
       "i18n": "sys",
       "group": true,
-      "hideInBreadcrumb": true,
       "children": [
         {
           "text": "系统设置",
