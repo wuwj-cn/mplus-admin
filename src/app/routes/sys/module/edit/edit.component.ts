@@ -1,51 +1,29 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-sys-module-edit',
   templateUrl: './edit.component.html',
 })
 export class SysModuleEditComponent implements OnInit {
-  record: any = {};
-  i: any;
-  schema: SFSchema = {
-    properties: {
-      no: { type: 'string', title: '编号' },
-      owner: { type: 'string', title: '姓名', maxLength: 15 },
-      callNo: { type: 'string', title: '日期', format: 'date' },
-      href: { type: 'string', title: '链接', format: 'uri' },
-      description: { type: 'string', title: '描述', maxLength: 140 },
-    },
-    required: ['owner', 'callNo', 'href', 'description'],
-  };
-  ui: SFUISchema = {
-    '*': {
-      spanLabelFixed: 100,
-      grid: { span: 12 },
-    },
-    $no: {
-      widget: 'text'
-    },
-    $href: {
-      widget: 'string',
-    },
-    $description: {
-      widget: 'textarea',
-      grid: { span: 24 },
-    },
-  };
+  @Input() op: string;
+  @Input() record: any = {};
+  validateForm: FormGroup;
 
   constructor(
     private modal: NzModalRef,
     public msgSrv: NzMessageService,
     public http: _HttpClient,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    if (this.record.id > 0)
-    this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
+    this.validateForm = this.fb.group({
+      moduleName: [ null, [ Validators.required ] ],
+      moduleCode: [ null, [ Validators.required ] ],
+    });
   }
 
   save(value: any) {

@@ -6,9 +6,82 @@
     </button>
     <button (click)="add()" nz-button nzType="primary">新建</button>
   </ng-template>
-  
+
 </page-header>
 <nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <simple-table #st [data]="url" [columns]="columns"></simple-table>
+  <form nz-form class="ant-advanced-search-form" *ngIf="!sfHidden">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
+        <nz-form-item>
+          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="moduleName">模块名称</nz-form-label>
+          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+            <input nz-input id="moduleName">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
+        <nz-form-item>
+          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="moduleCode">模块编码</nz-form-label>
+          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+            <input nz-input id="moduleCode">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
+        <nz-form-item>
+          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="version">版本</nz-form-label>
+          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+            <input nz-input id="version">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8" *ngIf="!isCollapse">
+        <nz-form-item>
+          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="status">状态</nz-form-label>
+          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+            <input nz-input id="status">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col [nzSpan]="24" style="text-align: right;">
+        <button nz-button [nzType]="'primary'">Search</button>
+        <button nz-button (click)="resetForm()">Clear</button>
+        <a style="margin-left:8px;font-size:12px;" (click)="toggleCollapse()">
+          Collapse
+          <i class="anticon" [class.anticon-down]="isCollapse" [class.anticon-up]="!isCollapse"></i>
+        </a>
+      </div>
+    </div>
+  </form>
+  <div class="search-result-list">
+    <nz-table #table [nzData]="dataSet" [nzSize]="small" (nzCurrentPageDataChange)="currentPageDataChange($event)" (nzPageIndexChange)="refreshStatus()"
+      (nzPageSizeChange)="refreshStatus()">
+      <thead>
+        <tr>
+          <th>模块名称</th>
+          <th>模块编码</th>
+          <th>模块描述</th>
+          <th>版本</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of table.data">
+          <td>{{data.userCode}}</td>
+          <td>{{data.username}}</td>
+          <td>{{data.name}}</td>
+          <td>{{data.tel}}</td>
+          <td>{{data.status}}</td>
+          <td>
+            <a href="#">编辑</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a href="#">删除</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
 </nz-card>

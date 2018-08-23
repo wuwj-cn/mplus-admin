@@ -1,10 +1,42 @@
-<div class="modal-header">
-  <div class="modal-title">编辑 {{ record.id }} 信息</div>
-</div>
-<nz-spin *ngIf="!i" class="modal-spin"></nz-spin>
-<sf *ngIf="i" #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="i" button="none">
-  <div class="modal-footer">
-    <button nz-button type="button" (click)="close()">关闭</button>
-    <button nz-button type="submit" [nzType]="'primary'" (click)="save(sf.value)" [disabled]="!sf.valid" [nzLoading]="http.loading">保存</button>
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <div nz-row [nzGutter]="16">
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired nzFor="moduleName">模块名称</nz-form-label>
+        <nz-form-control [nzSpan]="16">
+          <input nz-input formControlName="moduleName" id="moduleName">
+          <nz-form-explain *ngIf="validateForm.get('moduleName').dirty && validateForm.get('moduleName').errors">
+            The input is not valid E-mail!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzRequired nzFor="moduleCode">模块编码</nz-form-label>
+        <nz-form-control [nzSpan]="16">
+          <input nz-input formControlName="moduleCode" id="moduleCode">
+          <nz-form-explain *ngIf="validateForm.get('moduleCode').dirty && validateForm.get('moduleCode').errors">
+            The input is not valid E-mail!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4" nzFor="moduleDesc">模块描述</nz-form-label>
+        <nz-form-control [nzSpan]="20">
+          <textarea nz-input [nzAutosize]="{ minRows: 2 }" id="moduleDesc"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24" *ngIf="op=='view'">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4" nzFor="version">当前版本</nz-form-label>
+        <nz-form-control [nzSpan]="20">
+          <label id="version"></label>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
   </div>
-</sf>
+</form>
