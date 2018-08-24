@@ -9,36 +9,36 @@
 
 </page-header>
 <nz-card>
-  <form nz-form class="ant-advanced-search-form" *ngIf="!sfHidden">
+  <form nz-form class="ant-advanced-search-form" [nzLayout]="'vertical'" *ngIf="!sfHidden">
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
         <nz-form-item>
-          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="moduleName">模块名称</nz-form-label>
-          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+          <nz-form-label nzFor="moduleName">模块名称</nz-form-label>
+          <nz-form-control>
             <input nz-input id="moduleName">
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
         <nz-form-item>
-          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="moduleCode">模块编码</nz-form-label>
-          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+          <nz-form-label nzFor="moduleCode">模块编码</nz-form-label>
+          <nz-form-control>
             <input nz-input id="moduleCode">
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
         <nz-form-item>
-          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="version">版本</nz-form-label>
-          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+          <nz-form-label nzFor="version">版本</nz-form-label>
+          <nz-form-control>
             <input nz-input id="version">
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8" *ngIf="!isCollapse">
         <nz-form-item>
-          <nz-form-label [nzXs]="24" [nzSm]="16" [nzMd]="8" [nzLg]="8" nzFor="status">状态</nz-form-label>
-          <nz-form-control [nzXs]="24" [nzSm]="16" [nzMd]="16" [nzLg]="16">
+          <nz-form-label nzFor="status">状态</nz-form-label>
+          <nz-form-control>
             <input nz-input id="status">
           </nz-form-control>
         </nz-form-item>

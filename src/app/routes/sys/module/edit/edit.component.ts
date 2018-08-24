@@ -26,8 +26,8 @@ export class SysModuleEditComponent implements OnInit {
     });
   }
 
-  save(value: any) {
-    this.http.post(`/user/${this.record.id}`, value).subscribe(res => {
+  submitForm(value: any) {
+    this.http.post(`api/module/add`, value).subscribe(res => {
       this.msgSrv.success('保存成功');
       this.modal.close(true);
     });

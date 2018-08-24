@@ -41,8 +41,7 @@ export class SysModuleComponent implements OnInit {
           type: 'primary',
           disabled: ((form) => !form.validateForm.valid),
           onClick: (form) => {
-            // menuForm.submitForm(menuForm.validateForm.value);
-           
+            form.submitForm(form.validateForm.value);
           }
         }, {
           label: this.i18nService.fanyi('base.close'),
