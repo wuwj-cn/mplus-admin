@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { SysModuleEditComponent } from './edit/edit.component';
 import { I18NService } from '@core/i18n/i18n.service';
 import { NzModalService } from 'ng-zorro-antd';
+import { Result } from '@core/result';
 
 @Component({
   selector: 'app-sys-module',
@@ -63,6 +64,15 @@ export class SysModuleComponent implements OnInit {
   }
   toggleCollapse() {
     this.isCollapse = !this.isCollapse;
+  }
+
+  @Input() page = 1;
+  @Input() size = 10;
+  dataSet = [];
+  list(params: any) {
+    this.http.get<Result>(`api/module/list/${this.page}/${this.size}`, params).subscribe(res => {
+      this.dataSet = res.data.content;
+    });
   }
 
 }
