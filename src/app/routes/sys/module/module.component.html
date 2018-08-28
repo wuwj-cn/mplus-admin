@@ -56,14 +56,14 @@
     </div>
   </form>
   <div class="search-result-list">
-    <nz-table #table [nzData]="dataSet" nzShowSizeChanger [nzShowTotal]="totalTemplate">
+    <nz-table #table [nzData]="dataSet" [nzLoading]="loading" nzShowSizeChanger [nzShowTotal]="totalTemplate">
       <thead>
         <tr>
           <th>模块名称</th>
           <th>模块编码</th>
           <th>模块描述</th>
           <th>版本</th>
-          <th>状态</th>
+          <th [nzShowFilter]="true" [nzFilters]="status">状态</th>
           <th>操作</th>
         </tr>
       </thead>
@@ -73,13 +73,16 @@
           <td>{{data.moduleCode}}</td>
           <td>{{data.moduleDesc}}</td>
           <td>{{data.version}}</td>
-          <td>{{data.status}}</td>
           <td>
-            <a href="#">编辑</a>
+            <nz-badge nzStatus="{{data.statusType}}" nzText="{{data.statusText}}"></nz-badge>
+          </td>
+          <td>
+            <a (click)="edit(data)">编辑</a>
             <nz-divider nzType="vertical"></nz-divider>
             <a href="#">删除</a>
           </td>
         </tr>
+        
         <ng-template #totalTemplate let-range="range" let-total>
           {{range[0]}}-{{range[1]}} of {{total}} items
         </ng-template>

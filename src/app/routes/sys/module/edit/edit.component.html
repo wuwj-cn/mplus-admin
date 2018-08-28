@@ -4,7 +4,7 @@
       <nz-form-item>
         <nz-form-label nzRequired nzFor="moduleName">模块名称</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="moduleName" id="moduleName">
+          <input nz-input formControlName="moduleName" id="moduleName" value="{{record ? record.moduleName : ''}}">
           <nz-form-explain *ngIf="validateForm.get('moduleName').dirty && validateForm.get('moduleName').errors">
             The input is not valid E-mail!
           </nz-form-explain>
@@ -15,7 +15,7 @@
       <nz-form-item>
         <nz-form-label nzRequired nzFor="moduleCode">模块编码</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="moduleCode" id="moduleCode">
+          <input nz-input formControlName="moduleCode" id="moduleCode" value="{{record ? record.moduleCode : ''}}">
           <nz-form-explain *ngIf="validateForm.get('moduleCode').dirty && validateForm.get('moduleCode').errors">
             The input is not valid E-mail!
           </nz-form-explain>

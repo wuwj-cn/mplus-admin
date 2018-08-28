@@ -4,6 +4,13 @@ import { SysModuleEditComponent } from './edit/edit.component';
 import { I18NService } from '@core/i18n/i18n.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { Result } from '@core/result';
+import { map, tap } from 'rxjs/operators';
+
+enum Status {
+  NORMAL = 0,
+  DELETED = 1,
+  DISABLED = 2
+}
 
 @Component({
   selector: 'app-sys-module',
@@ -12,12 +19,33 @@ import { Result } from '@core/result';
 })
 export class SysModuleComponent implements OnInit {
 
-  constructor(private http: _HttpClient, 
+  @Input() page = 0;
+  @Input() size = 10;
+  dataSet: any[] = [];
+  loading = false;
+  sfHidden = true;
+  isCollapse = true;
+
+  status = [
+    { text: '正常', value: '0', type: 'success' },
+    { text: '删除', value: '1', type: 'error' },
+    { text: '停用', value: '2', type: 'warning' }
+  ];
+
+  constructor(
+    private http: _HttpClient, 
     private modalService: NzModalService,
     private i18nService: I18NService) { }
 
   ngOnInit() { 
-    
+    this.list(null);
+  }
+
+  searchBtnToggle() {
+    this.sfHidden = !this.sfHidden;
+  }
+  toggleCollapse() {
+    this.isCollapse = !this.isCollapse;
   }
 
   add() {
@@ -26,6 +54,10 @@ export class SysModuleComponent implements OnInit {
 
   view(record) {
     this.createModal(this.i18nService.fanyi('sys_module_op_view'), 'view', record);
+  }
+
+  edit(record: any) {
+    this.createModal(this.i18nService.fanyi('sys_module_op_edit'), 'edit', record);
   }
 
   createModal(title, op, record) {
@@ -57,22 +89,23 @@ export class SysModuleComponent implements OnInit {
       modal.afterClose.subscribe((result) => console.log('[afterClose] The result is:', result));
   }
 
-  sfHidden = true;
-  isCollapse = true;
-  searchBtnToggle() {
-    this.sfHidden = !this.sfHidden;
-  }
-  toggleCollapse() {
-    this.isCollapse = !this.isCollapse;
-  }
-
-  @Input() page = 1;
-  @Input() size = 10;
-  dataSet = [];
   list(params: any) {
-    this.http.get<Result>(`api/module/list/${this.page}/${this.size}`, params).subscribe(res => {
+    this.loading = true;
+    this.http.get<Result>(`api/module/list/${this.page}/${this.size}`, params)
+      .pipe(
+        map((result) => {
+          let content = result.data.content;
+          content.map((item) => {
+            const statusItem = this.status[item.status];
+            item.statusText = statusItem.text;
+            item.statusType = statusItem.type;
+          });
+          return result;
+        }),
+        tap(() => this.loading = false)
+      )
+      .subscribe(res => {
       this.dataSet = res.data.content;
     });
-  }
-
+  } 
 }
