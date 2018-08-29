@@ -63,13 +63,15 @@
           <th>模块编码</th>
           <th>模块描述</th>
           <th>版本</th>
-          <th [nzShowFilter]="true" [nzFilters]="status">状态</th>
+          <th 
+            nzShowSort [(nzSort)]="sortMap.status" (nzSortChange)="sort('status',$event)" 
+            nzShowFilter [nzFilters]="filterStatus" (nzFilterChange)="filterStatusChange($event)">状态</th>
           <th>操作</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let data of table.data">
-          <td>{{data.moduleName}}</td>
+          <td><a (click)="view(data)">{{data.moduleName}}</a></td>
           <td>{{data.moduleCode}}</td>
           <td>{{data.moduleDesc}}</td>
           <td>{{data.version}}</td>
@@ -79,10 +81,13 @@
           <td>
             <a (click)="edit(data)">编辑</a>
             <nz-divider nzType="vertical"></nz-divider>
-            <a href="#">删除</a>
+            <a (click)="statusToggle(data)">
+              <span *ngIf="data.status == '0'">停用</span>
+              <span *ngIf="data.status == '2'">启用</span>
+            </a>
           </td>
         </tr>
-        
+
         <ng-template #totalTemplate let-range="range" let-total>
           {{range[0]}}-{{range[1]}} of {{total}} items
         </ng-template>
