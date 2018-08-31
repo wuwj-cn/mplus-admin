@@ -4,7 +4,7 @@
       <nz-form-item>
         <nz-form-label nzRequired nzFor="moduleName">模块名称</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="moduleName" id="moduleName" value="{{record ? record.moduleName : ''}}">
+          <input nz-input name="moduleName" formControlName="moduleName" >
           <nz-form-explain *ngIf="validateForm.get('moduleName').dirty && validateForm.get('moduleName').errors">
             The input is not valid E-mail!
           </nz-form-explain>
@@ -15,7 +15,7 @@
       <nz-form-item>
         <nz-form-label nzRequired nzFor="moduleCode">模块编码</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="moduleCode" id="moduleCode" value="{{record ? record.moduleCode : ''}}">
+          <input nz-input name="moduleCode" formControlName="moduleCode">
           <nz-form-explain *ngIf="validateForm.get('moduleCode').dirty && validateForm.get('moduleCode').errors">
             The input is not valid E-mail!
           </nz-form-explain>
@@ -26,15 +26,15 @@
       <nz-form-item>
         <nz-form-label nzFor="moduleDesc">模块描述</nz-form-label>
         <nz-form-control>
-          <textarea nz-input [nzAutosize]="{ minRows: 2 }" id="moduleDesc"></textarea>
+          <textarea nz-input name="moduleDesc" formControlName="moduleDesc" [nzAutosize]="{ minRows: 2 }"></textarea>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="24" *ngIf="op=='view'">
+    <div nz-col [nzSpan]="24" *ngIf="op != 'create'">
       <nz-form-item>
         <nz-form-label nzFor="version">当前版本</nz-form-label>
         <nz-form-control>
-          <label id="version"></label>
+          <label id="version">{{ record.version }}</label>
         </nz-form-control>
       </nz-form-item>
     </div>

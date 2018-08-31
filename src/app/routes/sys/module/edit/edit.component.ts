@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -13,27 +12,17 @@ export class SysModuleEditComponent implements OnInit {
   validateForm: FormGroup;
 
   constructor(
-    private modal: NzModalRef,
-    public msgSrv: NzMessageService,
-    public http: _HttpClient,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      moduleName: [ null, [ Validators.required ] ],
-      moduleCode: [ null, [ Validators.required ] ],
+      moduleName: [this.record.moduleName, [Validators.required]],
+      moduleCode: [this.record.moduleCode, [Validators.required]],
+      moduleDesc: [this.record.moduleDesc],
+      version: [this.record.version],
+      status: [this.record.status],
+      id: [this.record.id]
     });
-  }
-
-  submitForm(value: any) {
-    this.http.post(`api/module/add`, value).subscribe(res => {
-      this.msgSrv.success('保存成功');
-      this.modal.close(true);
-    });
-  }
-
-  close() {
-    this.modal.destroy();
   }
 }

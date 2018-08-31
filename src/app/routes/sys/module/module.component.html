@@ -9,13 +9,13 @@
 
 </page-header>
 <nz-card>
-  <form nz-form class="ant-advanced-search-form" [nzLayout]="'vertical'" *ngIf="!sfHidden">
+  <form nz-form [formGroup]="searchForm" class="ant-advanced-search-form" [nzLayout]="'vertical'" *ngIf="!sfHidden">
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
         <nz-form-item>
           <nz-form-label nzFor="moduleName">模块名称</nz-form-label>
           <nz-form-control>
-            <input nz-input id="moduleName">
+            <input nz-input formControlName="moduleName" id="moduleName">
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -23,54 +23,50 @@
         <nz-form-item>
           <nz-form-label nzFor="moduleCode">模块编码</nz-form-label>
           <nz-form-control>
-            <input nz-input id="moduleCode">
+            <input nz-input formControlName="moduleCode" id="moduleCode">
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
         <nz-form-item>
-          <nz-form-label nzFor="version">版本</nz-form-label>
-          <nz-form-control>
-            <input nz-input id="version">
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8" *ngIf="!isCollapse">
-        <nz-form-item>
           <nz-form-label nzFor="status">状态</nz-form-label>
           <nz-form-control>
-            <input nz-input id="status">
+            <nz-select style="width: 100%" formControlName="status" id="status">
+              <nz-option nzLabel="全部" nzValue=""></nz-option>
+              <nz-option nzLabel="正常" nzValue="0"></nz-option>
+              <nz-option nzLabel="停用" nzValue="2"></nz-option>
+            </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
     </div>
     <div nz-row>
       <div nz-col [nzSpan]="24" style="text-align: right;">
-        <button nz-button [nzType]="'primary'" (click)="list()">Search</button>
-        <button nz-button (click)="resetForm()">Clear</button>
-        <a style="margin-left:8px;font-size:12px;" (click)="toggleCollapse()">
+        <button nz-button [nzType]="'primary'" (click)="list(true)">查询</button>
+        <button nz-button (click)="sf.reset()">重置</button>
+        <!-- <a style="margin-left:8px;font-size:12px;" (click)="toggleCollapse()">
           Collapse
           <i class="anticon" [class.anticon-down]="isCollapse" [class.anticon-up]="!isCollapse"></i>
-        </a>
+        </a> -->
       </div>
     </div>
   </form>
   <div class="search-result-list">
-    <nz-table #table [nzData]="dataSet" [nzLoading]="loading" nzShowSizeChanger [nzShowTotal]="totalTemplate">
+    <nz-table #nt [nzData]="dataSet" [nzLoading]="loading" nzShowSizeChanger [nzShowTotal]="totalTemplate" [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize" [nzTotal]="total" [nzFrontPagination]="false" (nzPageIndexChange)="list()" (nzPageSizeChange)="list(true)" >
       <thead>
         <tr>
           <th>模块名称</th>
           <th>模块编码</th>
           <th>模块描述</th>
           <th>版本</th>
-          <th 
-            nzShowSort [(nzSort)]="sortMap.status" (nzSortChange)="sort('status',$event)" 
-            nzShowFilter [nzFilters]="filterStatus" (nzFilterChange)="filterStatusChange($event)">状态</th>
+          <th nzShowSort [(nzSort)]="sortMap.status" (nzSortChange)="sort('status',$event)" nzShowFilter [nzFilters]="filterStatus"
+            (nzFilterChange)="filterStatusChange($event)">状态</th>
           <th>操作</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of table.data">
+        <tr *ngFor="let data of nt.data">
           <td><a (click)="view(data)">{{data.moduleName}}</a></td>
           <td>{{data.moduleCode}}</td>
           <td>{{data.moduleDesc}}</td>
@@ -88,8 +84,8 @@
           </td>
         </tr>
 
-        <ng-template #totalTemplate let-range="range" let-total>
-          {{range[0]}}-{{range[1]}} of {{total}} items
+        <ng-template #totalTemplate let-total>
+          共 {{total}} 条
         </ng-template>
       </tbody>
     </nz-table>
