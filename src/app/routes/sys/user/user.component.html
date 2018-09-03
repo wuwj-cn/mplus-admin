@@ -1,9 +1,90 @@
-<page-header>
+<page-header [autoBreadcrumb]="'false'">
   <ng-template #action>
+    <button nz-button (click)="searchBtnToggle($event)">
+      <span *ngIf="sfHidden">查询</span>
+      <span *ngIf="!sfHidden">隐藏</span>
+    </button>
     <button (click)="add()" nz-button nzType="primary">新建</button>
   </ng-template>
 </page-header>
 <nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <simple-table #st [data]="url" [columns]="columns"></simple-table>
+  <form nz-form [formGroup]="searchForm" class="ant-advanced-search-form" [nzLayout]="'vertical'" *ngIf="!sfHidden">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
+        <nz-form-item>
+          <nz-form-label nzFor="username">登录账号</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="username" id="username">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
+        <nz-form-item>
+          <nz-form-label nzFor="nickName">用户昵称</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="nickName" id="nickName">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="8">
+        <nz-form-item>
+          <nz-form-label nzFor="status">状态</nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 100%" formControlName="status" id="status">
+              <nz-option nzLabel="全部" nzValue=""></nz-option>
+              <nz-option nzLabel="正常" nzValue="0"></nz-option>
+              <nz-option nzLabel="停用" nzValue="2"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col [nzSpan]="24" style="text-align: right;">
+        <button nz-button [nzType]="'primary'" (click)="list(true)">查询</button>
+        <button nz-button (click)="sf.reset()">重置</button>
+        <!-- <a style="margin-left:8px;font-size:12px;" (click)="toggleCollapse()">
+          Collapse
+          <i class="anticon" [class.anticon-down]="isCollapse" [class.anticon-up]="!isCollapse"></i>
+        </a> -->
+      </div>
+    </div>
+  </form>
+  <div class="search-result-list">
+    <nz-table #nt [nzData]="dataSet" [nzLoading]="loading" nzShowSizeChanger [nzShowTotal]="rangeTemplate" [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize" [nzTotal]="total" [nzFrontPagination]="false" (nzPageIndexChange)="list()" (nzPageSizeChange)="list(true)" >
+      <thead>
+        <tr>
+          <th>登录账号</th>
+          <th>用户昵称</th>
+          <th>电子邮箱</th>
+          <th nzShowSort [(nzSort)]="sortMap.status" (nzSortChange)="sort('status',$event)" nzShowFilter [nzFilters]="filterStatus"
+            (nzFilterChange)="filterStatusChange($event)">状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of nt.data">
+          <td><a (click)="view(data)">{{data.username}}</a></td>
+          <td>{{data.nickName}}</td>
+          <td>{{data.email}}</td>
+          <td>
+            <nz-badge nzStatus="{{data.statusType}}" nzText="{{data.statusText}}"></nz-badge>
+          </td>
+          <td>
+            <a (click)="edit(data)">编辑</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a (click)="statusToggle(data)">
+              <span *ngIf="data.status == '0'">停用</span>
+              <span *ngIf="data.status == '2'">启用</span>
+            </a>
+          </td>
+        </tr>
+
+        <ng-template #rangeTemplate let-range="range" let-total>
+          当前 {{range[0]}}-{{range[1]}} 条, 共 {{total}} 条
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </div>
 </nz-card>

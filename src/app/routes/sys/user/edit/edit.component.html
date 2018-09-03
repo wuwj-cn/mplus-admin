@@ -1,10 +1,35 @@
-<div class="modal-header">
-  <div class="modal-title">编辑 {{ record.id }} 信息</div>
-</div>
-<nz-spin *ngIf="!i" class="modal-spin"></nz-spin>
-<sf *ngIf="i" #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="i" button="none">
-  <div class="modal-footer">
-    <button nz-button type="button" (click)="close()">关闭</button>
-    <button nz-button type="submit" [nzType]="'primary'" (click)="save(sf.value)" [disabled]="!sf.valid" [nzLoading]="http.loading">保存</button>
+<nz-spin *ngIf="!user"></nz-spin>
+<form nz-form [formGroup]="userForm" [nzLayout]="'vertical'">
+  <div nz-row [nzGutter]="16">
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="username">登录账号</nz-form-label>
+        <nz-form-control>
+          <input nz-input name="username" formControlName="username" >
+          <nz-form-explain *ngIf="validateForm.get('username').dirty && validateForm.get('username').errors">
+            The input is not valid username!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="nickName">用户昵称</nz-form-label>
+        <nz-form-control>
+          <input nz-input name="nickName" formControlName="nickName">
+          <nz-form-explain *ngIf="validateForm.get('nickName').dirty && validateForm.get('nickName').errors">
+            The input is not valid nickName!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzFor="email">电子邮箱</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input name="email" formControlName="email"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
   </div>
-</sf>
+</form>

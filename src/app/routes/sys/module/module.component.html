@@ -52,7 +52,7 @@
     </div>
   </form>
   <div class="search-result-list">
-    <nz-table #nt [nzData]="dataSet" [nzLoading]="loading" nzShowSizeChanger [nzShowTotal]="totalTemplate" [(nzPageIndex)]="pageIndex"
+    <nz-table #nt [nzData]="dataSet" [nzLoading]="loading" nzShowSizeChanger [nzShowTotal]="rangeTemplate" [(nzPageIndex)]="pageIndex"
       [(nzPageSize)]="pageSize" [nzTotal]="total" [nzFrontPagination]="false" (nzPageIndexChange)="list()" (nzPageSizeChange)="list(true)" >
       <thead>
         <tr>
@@ -84,8 +84,8 @@
           </td>
         </tr>
 
-        <ng-template #totalTemplate let-total>
-          共 {{total}} 条
+        <ng-template #rangeTemplate let-range="range" let-total>
+          当前 {{range[0]}}-{{range[1]}} 条, 共 {{total}} 条
         </ng-template>
       </tbody>
     </nz-table>
