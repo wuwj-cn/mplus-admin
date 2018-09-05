@@ -1,4 +1,4 @@
-<nz-spin *ngIf="!user"></nz-spin>
+<!-- <nz-spin *ngIf="!user"></nz-spin> -->
 <form nz-form [formGroup]="userForm" [nzLayout]="'vertical'">
   <div nz-row [nzGutter]="16">
     <div nz-col [nzSpan]="12">
@@ -6,7 +6,7 @@
         <nz-form-label nzRequired nzFor="username">登录账号</nz-form-label>
         <nz-form-control>
           <input nz-input name="username" formControlName="username" >
-          <nz-form-explain *ngIf="validateForm.get('username').dirty && validateForm.get('username').errors">
+          <nz-form-explain *ngIf="userForm.get('username').dirty && userForm.get('username').errors">
             The input is not valid username!
           </nz-form-explain>
         </nz-form-control>
@@ -17,17 +17,31 @@
         <nz-form-label nzRequired nzFor="nickName">用户昵称</nz-form-label>
         <nz-form-control>
           <input nz-input name="nickName" formControlName="nickName">
-          <nz-form-explain *ngIf="validateForm.get('nickName').dirty && validateForm.get('nickName').errors">
+          <nz-form-explain *ngIf="userForm.get('nickName').dirty && userForm.get('nickName').errors">
             The input is not valid nickName!
           </nz-form-explain>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="24">
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="password">密码</nz-form-label>
+        <nz-form-control>
+          <input type="password" nz-input name="password" formControlName="password">
+          <nz-form-explain *ngIf="userForm.get('password').dirty && userForm.get('password').errors">
+            The input is not valid password!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label nzFor="email">电子邮箱</nz-form-label>
         <nz-form-control>
-          <textarea nz-input name="email" formControlName="email"></textarea>
+          <input nz-input name="email" formControlName="email">
+          <nz-form-explain *ngIf="userForm.get('email').dirty && userForm.get('email').errors">
+            The input is not valid email!
+          </nz-form-explain>
         </nz-form-control>
       </nz-form-item>
     </div>
