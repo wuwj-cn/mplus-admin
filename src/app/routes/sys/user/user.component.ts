@@ -3,13 +3,9 @@ import { _HttpClient, ModalHelper } from '@delon/theme';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SysUserEditComponent } from './edit/edit.component';
 import { I18NService } from '@core/i18n/i18n.service';
-import { NzModalService } from 'ng-zorro-antd';
-
-enum Status {
-  NORMAL = "0",
-  // DELETED = "1",
-  DISABLED = "2"
-}
+import { NzModalService, NzMessageService } from 'ng-zorro-antd';
+import { Status } from '../enums/Status';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sys-user',
@@ -27,13 +23,14 @@ export class SysUserComponent implements OnInit {
   dataSet: any[] = [];
 
   constructor(
-    private http: _HttpClient, 
-    private modal: ModalHelper, 
+    private http: _HttpClient,
+    private modal: ModalHelper,
     private i18nService: I18NService,
     private modalService: NzModalService,
+    private msgSrv: NzMessageService,
     private fb: FormBuilder) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.searchForm = this.fb.group({
       username: [''],
       nickName: [''],
@@ -42,6 +39,7 @@ export class SysUserComponent implements OnInit {
       sortProperties: [''],
       sortDirection: ['']
     });
+    this.list(true);
   }
 
   filterStatus = [
@@ -51,7 +49,7 @@ export class SysUserComponent implements OnInit {
   ];
 
   sortMap = {
-    status   : null
+    status: null
   };
 
   searchBtnToggle() {
@@ -77,7 +75,7 @@ export class SysUserComponent implements OnInit {
         disabled: ((form) => !form.userForm.valid),
         onClick: (component) => {
           component.save(component.userForm.value);
-          
+
         }
       }, {
         label: this.i18nService.fanyi('base_close'),
@@ -105,17 +103,48 @@ export class SysUserComponent implements OnInit {
 
     this.loading = true;
     //后台分页, pageIndex从0开始
-    this.http.get(this.apiUrl + `/list/${this.pageIndex-1}/${this.pageSize}`, this.searchForm.value)
+    this.http.get(this.apiUrl + `/list/${this.pageIndex - 1}/${this.pageSize}`, this.searchForm.value)
+      .pipe(
+        map((result: any) => {
+          let content = result.data.content;
+          content.map((item) => {
+            this.mapStatus(item);
+          });
+          return result;
+        })
+      )
       .subscribe((res: any) => {
         this.total = res.data.totalElements;
         this.dataSet = res.data.content;
         // this.displayData = [...this.dataSet];
-        this.loading = false
+        this.loading = false;
+      });
+  }
+
+  statusToggle(record: any): void {
+    this.loading = true;
+    if (record.status == Status.NORMAL) {
+      record.status = Status.DISABLED;
+    } else {
+      record.status = Status.NORMAL;
+    }
+    this.http.put(`api/user/update`, record)
+      .subscribe((res: any) => {
+        this.list(false);
+        this.msgSrv.success('更新成功');
       });
   }
 
   delete() {
 
+  }
+
+  mapStatus(item: any) {
+    const index = this.filterStatus.findIndex(s => s.value === item.status);
+    const statusItem = this.filterStatus[index];
+    item.statusText = statusItem.text;
+    item.statusType = statusItem.type;
+    return item;
   }
 
 }

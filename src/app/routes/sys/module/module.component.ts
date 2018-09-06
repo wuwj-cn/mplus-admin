@@ -5,12 +5,8 @@ import { I18NService } from '@core/i18n/i18n.service';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { map, tap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Status } from '../enums/Status';
 
-enum Status {
-  NORMAL = "0",
-  // DELETED = "1",
-  DISABLED = "2"
-}
 
 @Component({
   selector: 'app-sys-module',
