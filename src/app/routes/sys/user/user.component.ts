@@ -114,14 +114,14 @@ export class SysUserComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
+        this.loading = false;
         this.total = res.data.totalElements;
         this.dataSet = res.data.content;
         // this.displayData = [...this.dataSet];
-        this.loading = false;
       });
   }
 
-  statusToggle(record: any): void {
+  updateStatus(record: any): void {
     this.loading = true;
     if (record.status == Status.NORMAL) {
       record.status = Status.DISABLED;

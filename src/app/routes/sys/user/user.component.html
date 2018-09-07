@@ -74,7 +74,7 @@
           <td>
             <a (click)="edit(data)">编辑</a>
             <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="statusToggle(data)">
+            <a (click)="updateStatus(data)">
               <span *ngIf="data.status == '0'">停用</span>
               <span *ngIf="data.status == '2'">启用</span>
             </a>
