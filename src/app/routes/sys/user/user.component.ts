@@ -22,6 +22,22 @@ export class SysUserComponent implements OnInit {
   total = 0;
   dataSet: any[] = [];
 
+  q: any = {
+    pi: 1,
+    ps: 10,
+    sorter: '',
+    status: null,
+    statusList: [],
+  };
+  status = [
+    { index: 0, text: '关闭', value: false, type: 'default', checked: false },
+    { index: 1, text: '运行中', value: false, type: 'processing', checked: false, },
+    { index: 2, text: '已上线', value: false, type: 'success', checked: false },
+    { index: 3, text: '异常', value: false, type: 'error', checked: false },
+  ];
+
+  expandForm = false;
+
   constructor(
     private http: _HttpClient,
     private modal: ModalHelper,
