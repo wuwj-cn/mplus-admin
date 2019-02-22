@@ -1,0 +1,87 @@
+{
+  "app": {
+    "name": "Mplus",
+    "description": "Ng-zorro admin panel front-end framework"
+  },
+  "user": {
+    "name": "mplus",
+    "avatar": "./assets/tmp/img/avatar.jpg",
+    "email": "cipchk@qq.com"
+  },
+  "menu": [
+    {
+      "text": "概览",
+      "i18n": "dashboard",
+      "icon": "anticon antanticon anticon-dashboard",
+      "link": "/dashboard"
+    },
+    {
+      "text": "系统管理",
+      "i18n": "sys",
+      "group": true,
+      "children": [
+        {
+          "text": "系统设置",
+          "i18n": "sys.sys_setting",
+          "icon": "anticon antanticon anticon-dashboard",
+          "children": [
+            {
+              "text": "模块管理",
+              "link": "/sys/module",
+              "i18n": "sys.module"
+            },
+            {
+              "text": "菜单管理",
+              "link": "/sys/menu",
+              "i18n": "sys.menu"
+            },
+            {
+              "text": "参数设置",
+              "link": "/sys/param",
+              "i18n": "sys.param_setting"
+            }
+          ]
+        },
+        {
+          "text": "组织管理",
+          "i18n": "sys.org_manage",
+          "icon": "anticon antanticon anticon-rocket",
+          "children": [
+            {
+              "text": "用户管理",
+              "link": "/sys/user",
+              "i18n": "sys.org.user"
+            },
+            {
+              "text": "机构管理",
+              "link": "/sys/org",
+              "i18n": "sys.org.org"
+            },
+            {
+              "text": "岗位管理",
+              "link": "/sys/post",
+              "i18n": "sys.org.post"
+            }
+          ]
+        },
+        {
+          "text": "权限管理",
+          "i18n": "sys.privilege",
+          "icon": "anticon antanticon anticon-appstore",
+          "children": [
+            {
+              "text": "角色管理",
+              "link": "/sys/role",
+              "i18n": "sys.privi.role"
+            },
+            {
+              "text": "权限设置",
+              "link": "/sys/priviSet",
+              "i18n": "sys.privi.privi_setting"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
