@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent } from '@delon/abc';
 import { SFSchema } from '@delon/form';
+import { SysSettingModuleEditComponent } from './edit/edit.component';
 
 @Component({
   selector: 'app-sys-module',
@@ -38,7 +39,9 @@ export class SysModuleComponent implements OnInit {
       width: '150px',
       buttons: [
         { text: '查看', click: (item: any) => `/form/${item.id}` },
-        { text: '编辑', type: 'static', click: 'reload' },
+        { text: '编辑', click: (record: any, modal: any) => {
+          this.add();
+        } },
       ]
     }
   ];
@@ -48,9 +51,7 @@ export class SysModuleComponent implements OnInit {
   ngOnInit() { }
 
   add() {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+    this.modal.createStatic(SysSettingModuleEditComponent, { i: { id: 0 } });
   }
 
 }

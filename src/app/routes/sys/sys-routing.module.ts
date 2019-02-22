@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SysModuleComponent } from './sys_setting/module/module.component';
-import { SysMenuComponent } from './sys_setting/menu/menu.component';
+import { SysModuleComponent } from './setting/module/module.component';
+import { SysMenuComponent } from './setting/menu/menu.component';
 import { SysUserComponent } from './org/user/user.component';
 import { SysOrgComponent } from './org/org/org.component';
 import { SysPostComponent } from './org/post/post.component';
