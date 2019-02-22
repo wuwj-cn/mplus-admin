@@ -1,13 +1,20 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
 import { SysRoutingModule } from './sys-routing.module';
-import { SysLogComponent } from './log/log.component';
-import { SysLogViewComponent } from './log/view/view.component';
+import { SysModuleComponent } from './sys_setting/module/module.component';
+import { SysMenuComponent } from './sys_setting/menu/menu.component';
+import { SysUserComponent } from './org/user/user.component';
+import { SysOrgComponent } from './org/org/org.component';
+import { SysPostComponent } from './org/post/post.component';
 
 const COMPONENTS = [
-  SysLogComponent];
+  SysModuleComponent,
+  SysMenuComponent,
+  SysUserComponent,
+  SysOrgComponent,
+  SysPostComponent];
 const COMPONENTS_NOROUNT = [
-  SysLogViewComponent];
+  ];
 
 @NgModule({
   imports: [

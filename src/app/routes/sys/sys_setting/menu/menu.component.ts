@@ -4,10 +4,10 @@ import { STColumn, STComponent } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 
 @Component({
-  selector: 'app-sys-log',
-  templateUrl: './log.component.html',
+  selector: 'app-sys-menu',
+  templateUrl: './menu.component.html',
 })
-export class SysLogComponent implements OnInit {
+export class SysMenuComponent implements OnInit {
   url = `/user`;
   searchSchema: SFSchema = {
     properties: {
@@ -24,9 +24,9 @@ export class SysLogComponent implements OnInit {
     { title: '头像', type: 'img', width: '50px', index: 'avatar' },
     { title: '时间', type: 'date', index: 'updatedAt' },
     {
-      title: '操作',
+      title: '',
       buttons: [
-        { text: '查看', click: (item: any) => `/form/${item.id}` },
+        // { text: '查看', click: (item: any) => `/form/${item.id}` },
         // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
       ]
     }
