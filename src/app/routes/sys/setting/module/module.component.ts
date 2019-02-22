@@ -41,7 +41,7 @@ export class SysModuleComponent implements OnInit {
         { text: '查看', click: (item: any) => `/form/${item.id}` },
         { text: '编辑', click: (record: any, modal: any) => {
           this.add();
-        } },
+        } }
       ]
     }
   ];
