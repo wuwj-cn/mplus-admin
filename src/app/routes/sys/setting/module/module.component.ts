@@ -11,7 +11,6 @@ import { SysSettingModuleEditComponent } from './edit/edit.component';
 export class SysModuleComponent implements OnInit {
   url = `/user`;
   searchSchema: SFSchema = {
-    maxItems: 3,
     properties: {
       moduleName: {
         type: 'string',
@@ -51,7 +50,8 @@ export class SysModuleComponent implements OnInit {
   ngOnInit() { }
 
   add() {
-    this.modal.createStatic(SysSettingModuleEditComponent, { i: { id: 0 } });
+    this.modal.createStatic(SysSettingModuleEditComponent, { i: { id: 0 } }).subscribe(res => {
+    });
   }
 
 }

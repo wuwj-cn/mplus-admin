@@ -14,7 +14,7 @@ export class SysSettingModuleEditComponent implements OnInit {
     properties: {
       no: { type: 'string', title: '编号' },
       owner: { type: 'string', title: '姓名', maxLength: 15 },
-      callNo: { type: 'number', title: '调用次数' },
+      callNo: { type: 'string', title: '调用次数' },
       href: { type: 'string', title: '链接', format: 'uri' },
       description: { type: 'string', title: '描述', maxLength: 140 },
     },
@@ -44,6 +44,7 @@ export class SysSettingModuleEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('edit component init...');
     if (this.record.id > 0)
     this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
   }
