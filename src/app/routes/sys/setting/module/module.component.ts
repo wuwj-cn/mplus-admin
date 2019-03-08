@@ -51,7 +51,10 @@ export class SysModuleComponent implements OnInit {
 
   constructor(private http: _HttpClient, private modal: ModalHelper, private msgSrv: NzMessageService,) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    const col = this.columns.find(w => w.render === 'status');
+    console.log(col);
+  }
 
   add(item: any) {
     this.modal.createStatic(SysSettingModuleEditComponent, { record: item }).subscribe(res => {
