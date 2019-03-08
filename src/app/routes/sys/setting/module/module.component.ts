@@ -1,29 +1,29 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
-import { STColumn, STComponent } from '@delon/abc';
+import { STColumn, STComponent, STPage, STData } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { SysSettingModuleEditComponent } from './edit/edit.component';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-sys-module',
   templateUrl: './module.component.html',
 })
+
 export class SysModuleComponent implements OnInit {
-  url = `/user`;
+  url = `/sys/module`;
+
+  status = [
+    { index: 0, text: '正常' },
+    { index: 1, text: '删除' },
+    { index: 2, text: '禁用' }
+  ];
+
   searchSchema: SFSchema = {
     properties: {
-      moduleName: {
-        type: 'string',
-        title: '模块名称'
-      },
-      moduleCode: {
-        type: 'string',
-        title: '模块编码'
-      },
-      status: {
-        type: 'string',
-        title: '状态'
-      }
+      moduleName: { type: 'string', title: '模块名称' },
+      moduleCode: { type: 'string', title: '模块编码' },
+      status: { type: 'string', title: '状态' }
     }
   };
   @ViewChild('st') st: STComponent;
@@ -32,26 +32,37 @@ export class SysModuleComponent implements OnInit {
     { title: '模块编码', index: 'moduleCode' },
     { title: '模块描述', index: 'desc' },
     { title: '版本', index: 'version' },
-    { title: '状态', index: 'status' },
+    { title: '状态', index: 'status', render: 'status'},
     {
       title: '操作',
       width: '150px',
       buttons: [
-        { text: '查看', click: (item: any) => `/form/${item.id}` },
-        { text: '编辑', click: (record: any, modal: any) => {
-          this.add();
-        } }
+        { text: '编辑', click: (item: any) => this.add(item) },
+        { text: '删除', type: 'del', click: (item: any) => this.delete(item) }
       ]
     }
   ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  page: STPage = {
+    show: true,
+    showSize: true,
+    pageSizes: [1,2,3,4,5]
+  }
+
+  constructor(private http: _HttpClient, private modal: ModalHelper, private msgSrv: NzMessageService,) { }
 
   ngOnInit() { }
 
-  add() {
-    this.modal.createStatic(SysSettingModuleEditComponent, { i: { id: 0 } }).subscribe(res => {
+  add(item: any) {
+    this.modal.createStatic(SysSettingModuleEditComponent, { record: item }).subscribe(res => {
+      this.st.reload();
     });
   }
 
+  delete(item: any) {
+    this.http.delete(`/sys/module/${item.id}`).subscribe(res => {
+      this.st.reload();
+      this.msgSrv.success('删除成功');
+    });
+  }
 }

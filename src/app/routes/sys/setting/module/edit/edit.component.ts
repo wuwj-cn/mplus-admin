@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema } from '@delon/form';
@@ -8,32 +8,27 @@ import { SFSchema, SFUISchema } from '@delon/form';
   templateUrl: './edit.component.html',
 })
 export class SysSettingModuleEditComponent implements OnInit {
-  record: any = {};
-  i: any;
+  @Input() record: any = {};
+  i: any = {};
   schema: SFSchema = {
     properties: {
-      no: { type: 'string', title: '编号' },
-      owner: { type: 'string', title: '姓名', maxLength: 15 },
-      callNo: { type: 'string', title: '调用次数' },
-      href: { type: 'string', title: '链接', format: 'uri' },
-      description: { type: 'string', title: '描述', maxLength: 140 },
+      moduleCode: { type: 'string', title: '模块编码' },
+      moduleName: { type: 'string', title: '模块名称'},
+      version: { type: 'string', title: '版本号' },
+      status: { type: 'string', title: '状态'},
+      desc: { type: 'string', title: '模块描述' },
     },
-    required: ['owner', 'callNo', 'href', 'description'],
+    required: ['moduleCode', 'moduleName', 'status'],
   };
   ui: SFUISchema = {
     '*': {
       spanLabelFixed: 100,
       grid: { span: 12 },
     },
-    $no: {
-      widget: 'text'
-    },
-    $href: {
-      widget: 'string',
-    },
-    $description: {
+    $desc: {
       widget: 'textarea',
-      grid: { span: 24 },
+      grid: { span: 24},
+      autosize: { minRows: 2, maxRows: 6 }
     },
   };
 
@@ -44,16 +39,24 @@ export class SysSettingModuleEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('edit component init...');
-    if (this.record.id > 0)
-    this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
+    if (this.record != undefined && this.record.id > 0) {
+      this.http.get(`/sys/module/${this.record.id}`).subscribe(res => (this.i = res));
+    }
   }
 
   save(value: any) {
-    this.http.post(`/user/${this.record.id}`, value).subscribe(res => {
-      this.msgSrv.success('保存成功');
-      this.modal.close(true);
-    });
+    if (this.record == undefined) {
+      this.http.post(`/sys/module`, value).subscribe(res => {
+        this.msgSrv.success('保存成功');
+        this.modal.close(true);
+      });      
+    } else {
+      this.http.put(`/sys/module/${this.record.id}`, value).subscribe(res => {
+        this.msgSrv.success('保存成功');
+        this.modal.close(true);
+      });
+    }
+    
   }
 
   close() {
