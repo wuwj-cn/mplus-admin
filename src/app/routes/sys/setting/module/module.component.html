@@ -7,7 +7,7 @@
   <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
   <st #st [data]="url" [columns]="columns" [page]="page" [ps]="5">
     <ng-template st-row="status" type="" let-item>
-      {{ item.status }}
+      <nz-badge [nzStatus]="status[item.status].type" [nzText]="status[item.status].text "></nz-badge>
     </ng-template>
   </st>
 </nz-card>

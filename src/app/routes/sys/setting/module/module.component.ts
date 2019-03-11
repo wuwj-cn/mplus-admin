@@ -14,16 +14,20 @@ export class SysModuleComponent implements OnInit {
   url = `/sys/module`;
 
   status = [
-    { index: 0, text: '正常' },
-    { index: 1, text: '删除' },
-    { index: 2, text: '禁用' }
+    { index: 0, text: '正常', type: 'success' },
+    { index: 1, text: '删除', type: 'error' },
+    { index: 2, text: '禁用', type: 'warning' }
   ];
 
   searchSchema: SFSchema = {
     properties: {
       moduleName: { type: 'string', title: '模块名称' },
       moduleCode: { type: 'string', title: '模块编码' },
-      status: { type: 'string', title: '状态' }
+      status: { type: 'array', title: '状态', items: {
+        properties: {
+          
+        }
+      } }
     }
   };
   @ViewChild('st') st: STComponent;
