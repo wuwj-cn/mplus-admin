@@ -26,19 +26,20 @@ export class SysModuleComponent implements OnInit {
     properties: {
       moduleName: { type: 'string', title: '模块名称' },
       moduleCode: { type: 'string', title: '模块编码' },
-      status: { type: 'string', title: '状态', enum: [
-        { value: 0, label: '正常' },
-        { value: 1, label: '删除' },
-        { value: 2, label: '禁用' }
-      ]}
+      status: { type: 'string', title: '状态', enum: this.status }
     }
   };
-
+ 
   ui: SFUISchema = {
     '*': {
       spanLabelFixed: 80,
       grid: { span: 6 },
     },
+    $status: {
+      widget: 'select',
+      size: 'default',
+      width: 200
+    }
   };
 
   @ViewChild('st') st: STComponent;

@@ -4,13 +4,15 @@
   </ng-template>
 </page-header>
 <nz-card>
-  <sf #sf mode="search" [schema]="searchSchema" [ui]="ui" [button]="none"  (formSubmit)="st.reset($event)" (formReset)="st.reset($event)">
-    <button type="submit" nz-button [nzType]="'primary'" [nzLoading]="loading">查询</button>
-    <button (click)="sf.reset()" type="button" nz-button>重置</button>
-    <a (click)="expandForm=!expandForm">
-      {{expandForm ? '收起' : '展开'}}
-      <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
-    </a>    
+  <sf #sf mode="search"  [schema]="searchSchema" [button]="none" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)">
+    <div style="float: right;">
+      <button type="submit" nz-button [nzType]="'primary'" [nzLoading]="loading">查询</button>
+      <button (click)="sf.reset()" type="button" nz-button>重置</button>
+      <a (click)="expandForm=!expandForm">
+        {{expandForm ? '收起' : '展开'}}
+        <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
+      </a> 
+    </div>
   </sf>
   <st #st [data]="url" [columns]="columns" [page]="page" [ps]="5">
     <ng-template st-row="status" type="" let-item>
