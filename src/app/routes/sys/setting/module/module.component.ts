@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STData } from '@delon/abc';
-import { SFSchema } from '@delon/form';
+import { SFSchema, SFUISchema } from '@delon/form';
 import { SysSettingModuleEditComponent } from './edit/edit.component';
 import { NzMessageService } from 'ng-zorro-antd';
 
@@ -13,19 +13,34 @@ import { NzMessageService } from 'ng-zorro-antd';
 export class SysModuleComponent implements OnInit {
   url = `/sys/module`;
 
+  loading = false;
+  expandForm = false;
+
   status = [
-    { index: 0, text: '正常' },
-    { index: 1, text: '删除' },
-    { index: 2, text: '禁用' }
+    { value: 0, label: '正常', type: 'success' },
+    { value: 1, label: '删除', type: 'error' },
+    { value: 2, label: '禁用', type: 'warning' }
   ];
 
   searchSchema: SFSchema = {
     properties: {
       moduleName: { type: 'string', title: '模块名称' },
       moduleCode: { type: 'string', title: '模块编码' },
-      status: { type: 'string', title: '状态' }
+      status: { type: 'string', title: '状态', enum: [
+        { value: 0, label: '正常' },
+        { value: 1, label: '删除' },
+        { value: 2, label: '禁用' }
+      ]}
     }
   };
+
+  ui: SFUISchema = {
+    '*': {
+      spanLabelFixed: 80,
+      grid: { span: 6 },
+    },
+  };
+
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
     { title: '模块名称', index: 'moduleName' },

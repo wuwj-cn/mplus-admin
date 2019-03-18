@@ -10,7 +10,7 @@ for (let i = 0; i < total; i++) {
       moduleCode: 'module_' + (i + 1),
       desc: 'this is a module description...',
       version: '1.0',
-      status: Math.floor(Math.random() * 10) % 4,
+      status: Math.floor(Math.random() * 10) % 3,
       updatedAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
       createdAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
     });
