@@ -35,11 +35,6 @@ export class SysModuleComponent implements OnInit {
       spanLabelFixed: 80,
       grid: { span: 6 },
     },
-    $status: {
-      widget: 'select',
-      size: 'default',
-      width: 200
-    }
   };
 
   @ViewChild('st') st: STComponent;
@@ -62,7 +57,7 @@ export class SysModuleComponent implements OnInit {
   page: STPage = {
     show: true,
     showSize: true,
-    pageSizes: [1,2,3,4,5]
+    pageSizes: [5,10,20,50,100]
   }
 
   constructor(private http: _HttpClient, private modal: ModalHelper, private msgSrv: NzMessageService,) { }

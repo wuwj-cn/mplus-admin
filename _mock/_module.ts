@@ -22,8 +22,16 @@ for (let i = 0; i < total; i++) {
       ps = +params.ps,
       start = (pi - 1) * ps;
   
-    if (params.no) {
-      ret = ret.filter(data => data.no.indexOf(params.no) > -1);
+    if (params.moduleName) {
+      ret = ret.filter(data => data.moduleName.indexOf(params.moduleName) > -1);
+    }
+
+    if (params.moduleCode) {
+      ret = ret.filter(data => data.moduleCode.indexOf(params.moduleCode) > -1);
+    }
+
+    if (params.status != undefined) {
+      ret = ret.filter(data => data.status === params.status);
     }
   
     return { total: ret.length, list: ret.slice(start, ps * pi) };
