@@ -4,21 +4,33 @@
   </ng-template>
 </page-header>
 <nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="url" [columns]="columns" [expand]="expand" expandRowByClick>
-    <ng-container #expand let-item let-index="index" let-column="column">
-      <tr *ngIf="item.parent && item.parent.expand || !item.parent">
-        <td
-          [nzIndentSize]="item.level * 20"
-          [nzShowExpand]="!!item.children"
-          [(nzExpand)]="item.expand"
-          (nzExpandChange)="collapse(mapOfExpandedData[data.key],item,$event)">
-          {{item.no}}
-        </td>
-        <td>{{item.callNo}}</td>
-        <td>{{item.avatar}}</td>
-        <td>{{item.updatedAt}}</td>
-      </tr>
+  <sf mode="search" [schema]="searchSchema"></sf>
+  <nz-table #expandTable [nzData]="listOfMapData">
+    <thead>
+    <tr>
+      <th nzWidth="20%">no</th>
+      <th nzWidth="30%">callNo</th>
+      <th>avatar</th>
+      <th>updatedAt</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let data of expandTable.data">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+        <tr *ngIf="item.parent && item.parent.expand || !item.parent">
+          <td
+            [nzIndentSize]="item.level * 20"
+            [nzShowExpand]="!!item.children"
+            [(nzExpand)]="item.expand"
+            (nzExpandChange)="collapse(mapOfExpandedData[data.key],item,$event)">
+            {{item.no}}
+          </td>
+          <td>{{item.callNo}}</td>
+          <td>{{item.avatar}}</td>
+          <td>{{item.updatedAt}}</td>
+        </tr>
+      </ng-container>
     </ng-container>
-  </st>
+    </tbody>
+  </nz-table>
 </nz-card>
