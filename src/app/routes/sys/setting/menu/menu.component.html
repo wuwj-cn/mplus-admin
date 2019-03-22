@@ -6,19 +6,20 @@
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
   <st #st [data]="url" [columns]="columns" [expand]="expand" expandRowByClick>
-    <ng-container #expand let-item let-index="index" let-column="column">
-      <tr *ngIf="item.parent && item.parent.expand || !item.parent">
-        <td
-          [nzIndentSize]="item.level * 20"
-          [nzShowExpand]="!!item.children"
-          [(nzExpand)]="item.expand"
-          (nzExpandChange)="collapse(mapOfExpandedData[data.key],item,$event)">
-          {{item.no}}
-        </td>
-        <td>{{item.callNo}}</td>
-        <td>{{item.avatar}}</td>
-        <td>{{item.updatedAt}}</td>
-      </tr>
-    </ng-container>
+    <ng-template #expand let-item let-index="index" let-column="column">
+      <ng-container *ngFor="let data of item.children">
+        <tr *ngIf="item.parent && item.parent.expand || !item.parent">
+          <td
+            [nzIndentSize]="item.level * 20"
+            [nzShowExpand]="!!item.children"
+            [(nzExpand)]="item.expand">
+            {{item.no}}
+          </td>
+          <td>{{item.callNo}}</td>
+          <td>{{item.avatar}}</td>
+          <td>{{item.updatedAt}}</td>
+        </tr>
+      </ng-container>
+    </ng-template>
   </st>
 </nz-card>

@@ -19,10 +19,10 @@ export class SysMenuComponent implements OnInit {
   };
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'no' },
-    { title: '调用次数', type: 'number', index: 'callNo' },
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '时间', type: 'date', index: 'updatedAt' },
+    { title: '菜单名称', index: 'menuName' },
+    { title: '归属模块', index: 'moduleName' },
+    { title: '链接', index: 'url' },
+    { title: '可见', index: 'isVisible' },
     {
       title: '',
       buttons: [
