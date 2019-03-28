@@ -4,18 +4,17 @@
   </ng-template>
 </page-header>
 <nz-card>
-  <sf mode="search" [schema]="searchSchema"></sf>
-  <nz-table #expandTable [nzData]="listOfMapData">
+  <nz-table #table [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
     <tr>
-      <th nzWidth="20%">no</th>
-      <th nzWidth="30%">callNo</th>
-      <th>avatar</th>
-      <th>updatedAt</th>
+      <th nzWidth="30%">菜单名称</th>
+      <th nzWidth="20%">归属模块</th>
+      <th>链接</th>
+      <th nzWidth="20%">可见</th>
     </tr>
     </thead>
     <tbody>
-    <ng-container *ngFor="let data of expandTable.data">
+    <ng-container *ngFor="let data of table.data">
       <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
         <tr *ngIf="item.parent && item.parent.expand || !item.parent">
           <td
@@ -23,11 +22,11 @@
             [nzShowExpand]="!!item.children"
             [(nzExpand)]="item.expand"
             (nzExpandChange)="collapse(mapOfExpandedData[data.key],item,$event)">
-            {{item.no}}
+            {{item.menuName}}
           </td>
-          <td>{{item.callNo}}</td>
-          <td>{{item.avatar}}</td>
-          <td>{{item.updatedAt}}</td>
+          <td>{{item.moduleName}}</td>
+          <td>{{item.url}}</td>
+          <td>{{item.isVisible}}</td>
         </tr>
       </ng-container>
     </ng-container>
