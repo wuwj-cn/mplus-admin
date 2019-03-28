@@ -42,8 +42,12 @@ const list = [
   ];
   
   function genData(params: any) {
-    
-    return { list: this.list };
+    let ret = [...list];
+    const pi = +params.pi,
+      ps = +params.ps,
+      start = (pi - 1) * ps;
+
+    return {  msg: 'ok', list: ret };
   }
 
   function saveData(value: any) {
@@ -61,8 +65,8 @@ const list = [
 
 export const MENU = {
   'GET /sys/menu': (req: MockRequest) => genData(req.queryString),
-//   'GET /sys/menu/:id': (req: MockRequest) => list.find(w => w.id === +req.params.id),
-  'POST /sys/menu': (req: MockRequest) => saveData(req.body),
-  'PUT /sys/menu/:id': (req: MockRequest) => updateData(+req.params.id, req.body),
-  'DELETE /sys/menu/:id': (req: MockRequest) => deleteData(+req.params.id),
+  // 'GET /sys/menu/:id': (req: MockRequest) => list.find(w => w.id === +req.params.id),
+  // 'POST /sys/menu': (req: MockRequest) => saveData(req.body),
+  // 'PUT /sys/menu/:id': (req: MockRequest) => updateData(+req.params.id, req.body),
+  // 'DELETE /sys/menu/:id': (req: MockRequest) => deleteData(+req.params.id),
 }

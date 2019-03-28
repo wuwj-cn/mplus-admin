@@ -19,45 +19,15 @@ export interface TreeNode {
   templateUrl: './menu.component.html',
 })
 export class SysMenuComponent implements OnInit {
-  url = `/menu`;
-  searchSchema: SFSchema = {
-    properties: {
-      no: {
-        type: 'string',
-        title: '编号'
-      }
-    }
-  };
-  @ViewChild('st') st: STComponent;
-  columns: STColumn[] = [
-    { title: '菜单名称', index: 'menuName' },
-    { title: '归属模块', index: 'moduleName' },
-    { title: '链接', index: 'url' },
-    { title: '可见', index: 'isVisible' },
-    {
-      title: '',
-      buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
-        // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
-      ]
-    }
-  ];
-
-  responseData:STRes = {
-    process: (data: STData[]) => {
-      data.forEach(item => {
-        this.mapOfExpandedData[ item.key ] = this.convertTreeToList(item);
-      })
-      return data;
-    }
-  }
+  url = `/sys/menu`;
 
   constructor(private http: _HttpClient, private modal: ModalHelper) { }
 
   ngOnInit() {
-    
+    this.load(); 
   }
 
+  listOfMapData = [];
   mapOfExpandedData: { [ key: string ]: TreeNode[] } = {};
 
   collapse(array: TreeNode[], data: TreeNode, $event: boolean): void {
@@ -98,6 +68,22 @@ export class SysMenuComponent implements OnInit {
       hashMap[ node.key ] = true;
       array.push(node);
     }
+  }
+
+  /**
+   * 根据页码重新加载数据
+   *
+   * @param pi 指定当前页码，默认：`1`
+   * @param extraParams 重新指定 `extraParams` 值
+   * @param options 选项
+   */
+  load(extraParams?: {} ) {
+    this.http.get(this.url, extraParams).subscribe((data: any) => {
+      this.listOfMapData = data.list;
+      this.listOfMapData.forEach(item => {
+        this.mapOfExpandedData[ item.key ] = this.convertTreeToList(item);
+      })
+    }); 
   }
 
   add() {
