@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STRes, STData } from '@delon/abc';
 import { SFSchema } from '@delon/form';
+import { SysSettingMenuEditComponent } from './edit/edit.component';
+import { MenuService } from './menu.service';
 
 export interface TreeNode {
   key: number;
@@ -21,7 +23,8 @@ export interface TreeNode {
 export class SysMenuComponent implements OnInit {
   url = `/sys/menu`;
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  constructor(private http: _HttpClient, private modal: ModalHelper,
+    private menuService: MenuService) { }
 
   ngOnInit() {
     this.load(); 
@@ -70,15 +73,8 @@ export class SysMenuComponent implements OnInit {
     }
   }
 
-  /**
-   * 根据页码重新加载数据
-   *
-   * @param pi 指定当前页码，默认：`1`
-   * @param extraParams 重新指定 `extraParams` 值
-   * @param options 选项
-   */
-  load(extraParams?: {} ) {
-    this.http.get(this.url, extraParams).subscribe((data: any) => {
+  load() {
+    this.menuService.get().subscribe((data: any) => {
       this.listOfMapData = data.list;
       this.listOfMapData.forEach(item => {
         this.mapOfExpandedData[ item.key ] = this.convertTreeToList(item);
@@ -86,10 +82,10 @@ export class SysMenuComponent implements OnInit {
     }); 
   }
 
-  add() {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+  add(item?: any) {
+    this.modal.createStatic(SysSettingMenuEditComponent, {  }).subscribe(res => {
+      // this.st.reload();
+    });
   }
 
 }

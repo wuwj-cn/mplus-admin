@@ -4,6 +4,7 @@ import { STColumn, STComponent, STPage, STData } from '@delon/abc';
 import { SFSchema, SFUISchema } from '@delon/form';
 import { SysSettingModuleEditComponent } from './edit/edit.component';
 import { NzMessageService } from 'ng-zorro-antd';
+import { ModuleService } from './module.service';
 
 @Component({
   selector: 'app-sys-module',
@@ -60,7 +61,9 @@ export class SysModuleComponent implements OnInit {
     pageSizes: [5,10,20,50,100]
   }
 
-  constructor(private http: _HttpClient, private modal: ModalHelper, private msgSrv: NzMessageService,) { }
+  constructor(private http: _HttpClient, private modal: ModalHelper, 
+    private msgSrv: NzMessageService,
+    private moduleService: ModuleService) { }
 
   ngOnInit() { 
     // const col = this.columns.find(w => w.render === 'status');
@@ -74,7 +77,7 @@ export class SysModuleComponent implements OnInit {
   }
 
   delete(item: any) {
-    this.http.delete(`/sys/module/${item.id}`).subscribe(res => {
+    this.moduleService.delete(item).subscribe(res => {
       this.st.reload();
       this.msgSrv.success('删除成功');
     });

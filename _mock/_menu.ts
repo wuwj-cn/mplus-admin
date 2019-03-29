@@ -5,29 +5,29 @@ const list = [
       key     : 1,
       menuName    : '系统管理',
       moduleName: 'sys',
-      url : '',
+      href : '',
       isVisible: '1',
       children: [
         {
           key    : 11,
           menuName   : '系统设置',
           moduleName    : 'sys',
-          url: '',
+          href: '',
           isVisible: '1',
           children: [
-            {key: 111, menuName: '模块管理', moduleName: 'sys', url: '/sys/module', isVisible: '1'},
-            {key: 112, menuName: '菜单管理', moduleName: 'sys', url: '/sys/menu', isVisible: '1'}
+            {key: 111, menuName: '模块管理', moduleName: 'sys', href: '/sys/module', isVisible: '1'},
+            {key: 112, menuName: '菜单管理', moduleName: 'sys', href: '/sys/menu', isVisible: '1'}
           ]
         },
         {
             key    : 12,
             menuName   : '组织管理',
             moduleName    : 'sys',
-            url: '',
+            href: '',
             isVisible: '1',
             children: [
-              {key: 121, menuName: '模块管理', moduleName: 'sys', url: '/sys/module', isVisible: '1'},
-              {key: 122, menuName: '菜单管理', moduleName: 'sys', url: '/sys/menu', isVisible: '1'}
+              {key: 121, menuName: '模块管理', moduleName: 'sys', href: '/sys/module', isVisible: '1'},
+              {key: 122, menuName: '菜单管理', moduleName: 'sys', href: '/sys/menu', isVisible: '1'}
             ]
         }
       ]
@@ -36,7 +36,7 @@ const list = [
         key    : 2,
         menuName   : '流程管理',
         moduleName    : 'flow',
-        url: '',
+        href: '',
         isVisible: '1'
     }
   ];
