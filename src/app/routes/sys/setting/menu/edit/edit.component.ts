@@ -3,6 +3,9 @@ import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema } from '@delon/form';
 import { ModuleService } from '../../module/module.service';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { MenuService } from '../menu.service';
 
 @Component({
   selector: 'app-sys-setting-menu-edit',
@@ -11,23 +14,41 @@ import { ModuleService } from '../../module/module.service';
 export class SysSettingMenuEditComponent implements OnInit {
   record: any = {};
   i: any = {};
-  moduleList: [];
-  menuList: [];
+  moduleList = [];
+  menuList = [];
 
   schema: SFSchema = {
     properties: {
-      parentMenu: {
-        type: 'string', title: '上级菜单', enum: this.menuList, ui: {widget: 'tree-select', expandChange: (e: NzFormatEmitEvent) => {
-          
-        }}
+      parentMenu: { type: 'string', title: '上级菜单', 
+        ui: {
+          widget: 'tree-select', 
+          asyncData: () => of(this.menuList).pipe(delay(1000)),
+          expandChange: (e: NzFormatEmitEvent) => {
+            let children = [...e.node.children];
+            let nodes = [];
+            this.menuService.getChildren(0).subscribe((data: any) => {
+              data.list.forEach((item: any) => {
+                this.menuList.push({ title: item.menuName, key: item.id })
+              });
+            });
+            children.forEach((item: any) => {
+              
+              nodes.push({ title: item.menuName, key: item.id, children: item.children });
+            })
+            console.log(nodes);
+            
+            return of(nodes).pipe(delay(1000));
+          }
+        }  
       },
       menuCode: { type: 'string', title: '菜单编码' },
       menuName: { type: 'string', title: '菜单名称' },
-      moduleName: { type: 'string', title: '归属模块', enum: this.moduleList, ui: { widget: 'select'} },
+      moduleName: { type: 'string', title: '归属模块', 
+        ui: { widget: 'select', asyncData: () => of(this.moduleList).pipe(delay(1000))} },
       href: { type: 'string', title: '链接' },
       isVisible: { type: 'string', title: '可见', enum: [
         { label: '显示', value: '0' },
-        { label: '隐藏', value: '1' },
+        { label: '隐藏', value: '1' }
       ], default: '0', ui: { widget: 'select' } },
       remark: { type: 'string', title: '备注' }
     },
@@ -49,13 +70,23 @@ export class SysSettingMenuEditComponent implements OnInit {
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
-    private moduleService: ModuleService
+    private moduleService: ModuleService,
+    private menuService: MenuService
   ) {}
 
   ngOnInit(): void {
     // if (this.record.id > 0)
     // this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
-    this.moduleService.get().subscribe();
+    this.moduleService.get().subscribe((data: any) => {
+      data.list.forEach((item: any) => {
+        this.moduleList.push({label: item.moduleName, value: item.id});
+      });
+    });
+    this.menuService.getChildren(0).subscribe((data: any) => {
+      data.list.forEach((item: any) => {
+        this.menuList.push({ title: item.menuName, key: item.id })
+      });
+    });
   }
 
   save(value: any) {
