@@ -1,84 +1,91 @@
 import { MockRequest } from '@delon/mock';
 
-const list = [
-  {
-    id     : 1,
-    menuName    : '系统管理',
+const data = [];
+
+data.push({
+  id: 1,
+  menuCode: '0',
+  menuName: 'root',
+  moduleName: '',
+  href: '',
+  isVisible: '0',
+  parentCode: ''
+});
+
+for(let i = 0; i < 2; i++) {
+  let node = {
+    id: data.length + 1,
+    menuCode: '0' + (i+1),
+    menuName: 'menu_0' + (i+1),
     moduleName: 'sys',
-    href : '',
-    isVisible: '1',
-    children: [
-      {
-        id    : 11,
-        menuName   : '系统设置',
-        moduleName    : 'sys',
-        href: '',
-        isVisible: '1',
-        children: [
-          {id: 111, menuName: '模块管理', moduleName: 'sys', href: '/sys/module', isVisible: '1', children: []},
-          {id: 112, menuName: '菜单管理', moduleName: 'sys', href: '/sys/menu', isVisible: '1', children: []}
-        ]
-      },
-      {
-          id    : 12,
-          menuName   : '组织管理',
-          moduleName    : 'sys',
-          href: '',
-          isVisible: '1',
-          children: [
-            {id: 121, menuName: '模块管理', moduleName: 'sys', href: '/sys/module', isVisible: '1', children: []},
-            {id: 122, menuName: '菜单管理', moduleName: 'sys', href: '/sys/menu', isVisible: '1', children: []}
-          ]
-      }
-    ]
-  },
-  {
-      id    : 2,
-      menuName   : '流程管理',
-      moduleName    : 'flow',
-      href: '',
-      isVisible: '1',
-      children: []
+    href: '',
+    isVisible: '0',
+    parentCode: '0'
+  };
+  data.push(node);
+  for(let j = 0; j < 2; j++) {
+    let child = {
+      id: data.length + 1,
+      menuCode: node.menuCode + '0' + (j+1),
+      menuName: 'menu_' + node.menuCode + '0' + (j+1),
+      moduleName: 'sys',
+      href: '#',
+      isVisible: '0',
+      parentCode: node.menuCode
+    };
+    data.push(child);
   }
-];
+}
 
-function genData(params: any) {
-  let ret = [...list];
-  const pi = +params.pi,
-    ps = +params.ps,
-    start = (pi - 1) * ps;
+function genTree(menuCode: string) {
+  let nodes = [...data];
+  let node = nodes.find(w => w.menuCode === menuCode);
+  let children = nodes.filter(w => (w.parentCode === menuCode && w.isVisible !== '1'));
+  if(children !== undefined) {
+    node.children = [...children];
+    node.children.forEach((item: any) => genTree(item.menuCode));
+  }
+  return node;
+}
 
-  return {  msg: 'ok', list: ret };
+function genData(menuCode:string, params?: any) {
+  let tree = genTree(menuCode);
+  return {  msg: 'ok', list: tree };
 }
 
 function saveData(value: any) {
-  return { msg: 'ok'};
+  let ran_id = data.length + 1;
+  const item = {
+    id: ran_id,
+  };
+  Object.assign(item, value);
+  data.push(item);
+  return { msg: 'ok', data: item };
 }
 
-function updateData(id: number, value: any) {
-  return { msg: 'ok'};
+function updateData(menuCode: string, value: any) {
+  const item = data.find(w => w.menuCode === menuCode);
+  if (!item) return { msg: '无效信息' };
+  Object.assign(item, value);
+  return { msg: 'ok', data: item };
 }
 
-function deleteData(id: number) {
-  
-  return { msg: 'ok'};
-}
-
-function getChildren(id: number, params: any) {
-  let ret = [...list];
-  // if( id !== 0 ) {
-  //   let parent = ret.find(w => w.id === +id);  
-  //   ret = [...parent.children];
-  // } 
-  console.log(ret);
-  return { msg: 'ok', list: ret };
+function deleteData(menuCode: string) {
+  data.filter((w, index) => {
+    if(w.parentCode === menuCode) data.splice(index, 1);
+  });
+  const item = data.find(w => w.menuCode === menuCode);
+  const index = data.findIndex(w => w.menuCode === menuCode);
+  if (index === -1) return { msg: '无效信息' };
+  data.splice(index, 1);
+  return { msg: 'ok', data: item };
 }
 
 export const MENU = {
-  'GET /sys/menu': (req: MockRequest) => genData(req.queryString),
-  'GET /sys/menu/:id': (req: MockRequest) => list.find(w => w.id === +req.params.id),
-  'GET /sys/menu/:id/children': (req: MockRequest) => getChildren(req.params.id, req.queryString),
-  // 'POST /sys/menu': (req: MockRequest) => saveData(req.body),
-  // 'PUT /sys/menu/:id': (req: MockRequest) => updateData(+req.params.id, req.body),
-  // 'DELETE /sys/menu/:id': (req: MockRequest) => deleteData(+req.params.id),
+  'GET /sys/menu': (req: MockRequest) => genData('0', req.queryString),
+  'GET /sys/menu/:menuCode': (req: MockRequest) => data.find(w => w.menuCode === req.params.menuCode),
+  'GET /sys/menu/:menuCode/children': (req: MockRequest) => genData(req.params.menuCode, req.queryString),
+  'POST /sys/menu': (req: MockRequest) => saveData(req.body),
+  'PUT /sys/menu/:menuCode': (req: MockRequest) => updateData(req.params.menuCode, req.body),
+  'DELETE /sys/menu/:menuCode': (req: MockRequest) => deleteData(req.params.menuCode),
 }

@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
-import { STColumn, STComponent, STRes, STData } from '@delon/abc';
-import { SFSchema } from '@delon/form';
 import { SysSettingMenuEditComponent } from './edit/edit.component';
 import { MenuService } from './menu.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 export interface TreeNode {
-  key: number;
+  id: string;
   menuName: string;
   moduleName: string;
   url: string;
@@ -23,7 +22,9 @@ export interface TreeNode {
 export class SysMenuComponent implements OnInit {
   url = `/sys/menu`;
 
-  constructor(private http: _HttpClient, private modal: ModalHelper,
+  constructor(
+    private msgSrv: NzMessageService,
+    private modal: ModalHelper,
     private menuService: MenuService) { }
 
   ngOnInit() {
@@ -37,7 +38,7 @@ export class SysMenuComponent implements OnInit {
     if ($event === false) {
       if (data.children) {
         data.children.forEach(d => {
-          const target = array.find(a => a.key === d.key)!;
+          const target = array.find(a => a.id === d.id)!;
           target.expand = false;
           this.collapse(array, target, false);
         });
@@ -67,25 +68,31 @@ export class SysMenuComponent implements OnInit {
   }
 
   visitNode(node: TreeNode, hashMap: { [ key: string ]: any }, array: TreeNode[]): void {
-    if (!hashMap[ node.key ]) {
-      hashMap[ node.key ] = true;
+    if (!hashMap[ node.id ]) {
+      hashMap[ node.id ] = true;
       array.push(node);
     }
   }
 
   load() {
     this.menuService.get().subscribe((data: any) => {
-      this.listOfMapData = data.list;
+      this.listOfMapData = data.list.children;
       this.listOfMapData.forEach(item => {
-        this.mapOfExpandedData[ item.key ] = this.convertTreeToList(item);
+        this.mapOfExpandedData[ item.id ] = this.convertTreeToList(item);
       })
     }); 
   }
 
   add(item?: any) {
-    this.modal.createStatic(SysSettingMenuEditComponent, {  }).subscribe(res => {
-      // this.st.reload();
+    this.modal.createStatic(SysSettingMenuEditComponent, { record: item }).subscribe(() => {
+      this.load();
     });
   }
 
+  delete(menuCode: string) {
+    this.menuService.delete(menuCode).subscribe(() => {
+      this.msgSrv.success('删除成功');
+      this.load();
+    })
+  }
 }

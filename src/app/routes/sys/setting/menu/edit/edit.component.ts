@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema } from '@delon/form';
@@ -12,32 +12,25 @@ import { MenuService } from '../menu.service';
   templateUrl: './edit.component.html',
 })
 export class SysSettingMenuEditComponent implements OnInit {
-  record: any = {};
-  i: any = {};
+  @Input() record: any = {};
+  i: any;
   moduleList = [];
   menuList = [];
 
   schema: SFSchema = {
     properties: {
-      parentMenu: { type: 'string', title: '上级菜单', 
+      parentCode: { type: 'string', title: '上级菜单', 
         ui: {
           widget: 'tree-select', 
-          asyncData: () => of(this.menuList).pipe(delay(1000)),
+          asyncData: () => of(this.menuList).pipe(delay(300)),
           expandChange: (e: NzFormatEmitEvent) => {
-            let children = [...e.node.children];
             let nodes = [];
-            this.menuService.getChildren(0).subscribe((data: any) => {
-              data.list.forEach((item: any) => {
-                this.menuList.push({ title: item.menuName, key: item.id })
+            this.menuService.getChildren(e.node.key).subscribe((data: any) => {
+              data.list.children.forEach((item: any) => {
+                nodes.push({ title: item.menuName, key: item.menuCode })
               });
             });
-            children.forEach((item: any) => {
-              
-              nodes.push({ title: item.menuName, key: item.id, children: item.children });
-            })
-            console.log(nodes);
-            
-            return of(nodes).pipe(delay(1000));
+            return of(nodes).pipe(delay(300));
           }
         }  
       },
@@ -75,22 +68,26 @@ export class SysSettingMenuEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // if (this.record.id > 0)
-    // this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
     this.moduleService.get().subscribe((data: any) => {
       data.list.forEach((item: any) => {
         this.moduleList.push({label: item.moduleName, value: item.id});
       });
     });
-    this.menuService.getChildren(0).subscribe((data: any) => {
-      data.list.forEach((item: any) => {
-        this.menuList.push({ title: item.menuName, key: item.id })
+    this.menuService.getChildren('0').subscribe((data: any) => {
+      data.list.children.forEach((item: any) => {
+        this.menuList.push({ title: item.menuName, key: item.menuCode })
       });
     });
+    if (this.record !== undefined && this.record.id > 0) {
+      this.menuService.getByCode(this.record.menuCode)
+                      .subscribe(res => this.i = res);
+    } else {
+      this.i = {};
+    }
   }
-
+  
   save(value: any) {
-    this.http.post(`/user/${this.record.id}`, value).subscribe(res => {
+    this.menuService.save(value).subscribe(res => {
       this.msgSrv.success('保存成功');
       this.modal.close(true);
     });
