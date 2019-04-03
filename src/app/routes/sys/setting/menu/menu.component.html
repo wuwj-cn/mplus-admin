@@ -27,7 +27,11 @@
           </td>
           <td>{{item.moduleName}}</td>
           <td>{{item.href}}</td>
-          <td>{{item.isVisible}}</td>
+          <td>
+            <nz-badge [nzStatus]="visibleStatus[item.isVisible].type" 
+                      [nzText]="visibleStatus[item.isVisible].label ">
+            </nz-badge>
+          </td>
           <td>
             <a (click)="add(item)">编辑</a>
             <nz-divider nzType="vertical"></nz-divider>

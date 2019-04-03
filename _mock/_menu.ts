@@ -40,7 +40,7 @@ for(let i = 0; i < 2; i++) {
 function genTree(menuCode: string) {
   let nodes = [...data];
   let node = nodes.find(w => w.menuCode === menuCode);
-  let children = nodes.filter(w => (w.parentCode === menuCode && w.isVisible !== '1'));
+  let children = nodes.filter(w => (w.parentCode === menuCode));
   if(children !== undefined) {
     node.children = [...children];
     node.children.forEach((item: any) => genTree(item.menuCode));

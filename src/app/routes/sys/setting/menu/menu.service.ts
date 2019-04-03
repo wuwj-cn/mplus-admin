@@ -21,8 +21,9 @@ export class MenuService {
     return this.http.get(`/sys/menu/${menuCode}/children`);
   }
 
-  save(value: any, menuCode?: string): Observable<any> {
+  save(value: any): Observable<any> {
     let res: Observable<any>;
+    let menuCode = value.menuCode;
     if ( menuCode === undefined ) {
       res = this.http.post(`/sys/menu`, value);
     } else {

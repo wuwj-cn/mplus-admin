@@ -34,6 +34,11 @@ export class SysMenuComponent implements OnInit {
   listOfMapData = [];
   mapOfExpandedData: { [ key: string ]: TreeNode[] } = {};
 
+  visibleStatus = [
+    { value: '0', label: '可见', type: 'success' },
+    { value: '1', label: '隐藏', type: 'warning' }
+  ];
+
   collapse(array: TreeNode[], data: TreeNode, $event: boolean): void {
     if ($event === false) {
       if (data.children) {
@@ -77,6 +82,7 @@ export class SysMenuComponent implements OnInit {
   load() {
     this.menuService.get().subscribe((data: any) => {
       this.listOfMapData = data.list.children;
+      console.log(this.listOfMapData);
       this.listOfMapData.forEach(item => {
         this.mapOfExpandedData[ item.id ] = this.convertTreeToList(item);
       })

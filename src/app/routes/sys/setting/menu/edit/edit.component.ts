@@ -37,7 +37,7 @@ export class SysSettingMenuEditComponent implements OnInit {
       menuCode: { type: 'string', title: '菜单编码' },
       menuName: { type: 'string', title: '菜单名称' },
       moduleName: { type: 'string', title: '归属模块', 
-        ui: { widget: 'select', asyncData: () => of(this.moduleList).pipe(delay(1000))} },
+        ui: { widget: 'select', asyncData: () => of(this.moduleList).pipe(delay(300))} },
       href: { type: 'string', title: '链接' },
       isVisible: { type: 'string', title: '可见', enum: [
         { label: '显示', value: '0' },
