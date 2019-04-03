@@ -51,6 +51,7 @@
   "sys.org_manage": "组织管理",
   "sys.org.user": "用户管理",
   "sys.org.org": "机构管理",
+  "sys.org.dept": "部门管理",
   "sys.org.post": "岗位管理",
 
   "sys.privilege": "权限管理",
