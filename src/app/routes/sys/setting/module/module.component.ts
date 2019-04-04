@@ -18,9 +18,9 @@ export class SysModuleComponent implements OnInit {
   expandForm = false;
 
   status = [
-    { value: 0, label: '正常', type: 'success' },
-    { value: 1, label: '删除', type: 'error' },
-    { value: 2, label: '禁用', type: 'warning' }
+    { value: '0', label: '正常', type: 'success' },
+    { value: '1', label: '删除', type: 'error' },
+    { value: '2', label: '禁用', type: 'warning' }
   ];
 
   searchSchema: SFSchema = {

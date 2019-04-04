@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
+import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema } from '@delon/form';
+import { OrgService } from '../org.service';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sys-org-org-edit',
@@ -12,28 +15,37 @@ export class SysOrgOrgEditComponent implements OnInit {
   i: any;
   schema: SFSchema = {
     properties: {
-      no: { type: 'string', title: '编号' },
-      owner: { type: 'string', title: '姓名', maxLength: 15 },
-      callNo: { type: 'number', title: '调用次数' },
-      href: { type: 'string', title: '链接', format: 'uri' },
-      description: { type: 'string', title: '描述', maxLength: 140 },
+      parentCode: { type: 'string', title: '上级机构' },
+      orgCode: { type: 'string', title: '机构编码' },
+      orgName: { type: 'string', title: '机构名称' },
+      fullName: { type: 'string', title: '机构全称' },
+      status: { type: 'string', title: '状态' },
+      remark: { type: 'string', title: '备注' },
     },
-    required: ['owner', 'callNo', 'href', 'description'],
+    required: ['orgCode', 'orgName'],
   };
   ui: SFUISchema = {
     '*': {
       spanLabelFixed: 100,
       grid: { span: 12 },
     },
-    $no: {
-      widget: 'text'
+    $parentCode: {
+      widget: 'tree-select', 
+        asyncData: () => of(this.orgList).pipe(delay(300)),
+        expandChange: (e: NzFormatEmitEvent) => {
+          let nodes = [];
+          this.orgService.getChildren(e.node.key).subscribe((data: any) => {
+            data.list.children.forEach((item: any) => {
+              nodes.push({ title: item.menuName, key: item.menuCode })
+            });
+          });
+          return of(nodes).pipe(delay(300));
+        }
     },
-    $href: {
-      widget: 'string',
-    },
-    $description: {
+    $remark: {
       widget: 'textarea',
       grid: { span: 24 },
+      autosize: { minRows: 2, maxRows: 6 }
     },
   };
 
@@ -41,11 +53,15 @@ export class SysOrgOrgEditComponent implements OnInit {
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
+    private orgService: OrgService
   ) {}
 
+  orgList = [];
+
   ngOnInit(): void {
-    if (this.record.id > 0)
-    this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
+    // if (this.record.id > 0)
+    // this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
+    this.i = {};
   }
 
   save(value: any) {

@@ -5,5 +5,40 @@
 </page-header>
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="url" [columns]="columns"></st>
+  <nz-table #table [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th>机构名称</th>
+      <th>机构全称</th>
+      <th nzWidth="10%">状态</th>
+      <th nzWidth="150px">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let data of table.data">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.id]">
+        <tr *ngIf="item.parent && item.parent.expand || !item.parent">
+          <td
+            [nzIndentSize]="item.level * 20"
+            [nzShowExpand]="!!item.children"
+            [(nzExpand)]="item.expand"
+            (nzExpandChange)="collapse(mapOfExpandedData[data.id],item,$event)">
+            {{ item.orgCode }} - {{item.orgName}}
+          </td>
+          <td>{{item.fullName}}</td>
+          <td>
+            <nz-badge [nzStatus]="status[+item.status].type" 
+                      [nzText]="status[+item.status].label ">
+            </nz-badge>
+          </td>
+          <td>
+            <a (click)="add(item)">编辑</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-popconfirm nzTitle="确认删除吗?" (nzOnConfirm)="delete(item.orgCode)">删除</a>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+    </tbody>
+  </nz-table>
 </nz-card>

@@ -1,14 +1,32 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
-import { STColumn, STComponent } from '@delon/abc';
+import { STColumn, STComponent, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
+import { OrgService } from './org.service';
+import { SysOrgOrgEditComponent } from './edit/edit.component';
+
+export interface TreeNode {
+  id: string;
+  orgCode: string;
+  orgName: string;
+  fullName: string;
+  status: string;
+  level: number;
+  expand: boolean;
+  children?: TreeNode[];
+}
 
 @Component({
   selector: 'app-sys-org',
   templateUrl: './org.component.html',
 })
 export class SysOrgComponent implements OnInit {
-  url = `/user`;
+  status = [
+    { value: '0', label: '正常', type: 'success' },
+    { value: '1', label: '删除', type: 'error' },
+    { value: '2', label: '停用', type: 'warning' }
+  ];
+
   searchSchema: SFSchema = {
     properties: {
       no: {
@@ -18,28 +36,71 @@ export class SysOrgComponent implements OnInit {
     }
   };
   @ViewChild('st') st: STComponent;
-  columns: STColumn[] = [
-    { title: '编号', index: 'no' },
-    { title: '调用次数', type: 'number', index: 'callNo' },
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '时间', type: 'date', index: 'updatedAt' },
-    {
-      title: '',
-      buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
-        // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
-      ]
+
+  constructor(
+    private modal: ModalHelper,
+    private orgService: OrgService) { }
+
+  listOfMapData = [];
+  mapOfExpandedData: { [ key: string ]: TreeNode[] } = {};
+
+  ngOnInit() {
+    this.load();
+  }
+
+  load() {
+    this.orgService.get().subscribe((data: any) => {
+      this.listOfMapData = data.list.children;
+      this.listOfMapData.forEach(item => {
+        this.mapOfExpandedData[ item.id ] = this.convertTreeToList(item);
+      })
+    }); 
+  }
+
+  add(item?: any) {
+    this.modal.createStatic(SysOrgOrgEditComponent, { record: item }).subscribe(() => {
+      this.load();
+    });
+  }
+
+  collapse(array: TreeNode[], data: TreeNode, $event: boolean): void {
+    if ($event === false) {
+      if (data.children) {
+        data.children.forEach(d => {
+          const target = array.find(a => a.id === d.id)!;
+          target.expand = false;
+          this.collapse(array, target, false);
+        });
+      } else {
+        return;
+      }
     }
-  ];
+  }
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  convertTreeToList(root: object): TreeNode[] {
+    const stack: any[] = [];
+    const array: any[] = [];
+    const hashMap = {};
+    stack.push({ ...root, level: 0, expand: false });
 
-  ngOnInit() { }
+    while (stack.length !== 0) {
+      const node = stack.pop();
+      this.visitNode(node, hashMap, array);
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          stack.push({ ...node.children[ i ], level: node.level + 1, expand: false, parent: node });
+        }
+      }
+    }
 
-  add() {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+    return array;
+  }
+
+  visitNode(node: TreeNode, hashMap: { [ key: string ]: any }, array: TreeNode[]): void {
+    if (!hashMap[ node.id ]) {
+      hashMap[ node.id ] = true;
+      array.push(node);
+    }
   }
 
 }
