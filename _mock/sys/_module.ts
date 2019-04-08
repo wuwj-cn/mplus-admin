@@ -33,8 +33,7 @@ for (let i = 0; i < total; i++) {
     if (params.status != undefined) {
       ret = ret.filter(data => data.status === params.status);
     }
-  
-    return { total: ret.length, list: !start ? ret: ret.slice(start, ps * pi) };
+    return { total: ret.length, list: ret.slice(start, ps * pi) };
   }
 
   function saveData(value: any) {
