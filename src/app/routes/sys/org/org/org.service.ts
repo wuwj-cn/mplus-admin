@@ -22,11 +22,11 @@ export class OrgService {
 
     save(value: any): Observable<any> {
         let res: Observable<any>;
-        let orgCode = value.orgCode;
-        if (orgCode === undefined) {
+        let id = value.id;
+        if (id === undefined) {
             res = this.http.post(`/sys/org`, value);
         } else {
-            res = this.http.put(`/sys/org/${orgCode}`, value);
+            res = this.http.put(`/sys/org/${value.orgCode}`, value);
         }
         return res;
     }

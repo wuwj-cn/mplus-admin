@@ -4,6 +4,7 @@ import { STColumn, STComponent, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { OrgService } from './org.service';
 import { SysOrgOrgEditComponent } from './edit/edit.component';
+import { NzMessageService } from 'ng-zorro-antd';
 
 export interface TreeNode {
   id: string;
@@ -39,6 +40,7 @@ export class SysOrgComponent implements OnInit {
 
   constructor(
     private modal: ModalHelper,
+    private msgSrv: NzMessageService,
     private orgService: OrgService) { }
 
   listOfMapData = [];
@@ -101,6 +103,13 @@ export class SysOrgComponent implements OnInit {
       hashMap[ node.id ] = true;
       array.push(node);
     }
+  }
+
+  delete(orgCode: string) {
+    this.orgService.delete(orgCode).subscribe(() => {
+      this.msgSrv.success('删除成功');
+      this.load();
+    })
   }
 
 }

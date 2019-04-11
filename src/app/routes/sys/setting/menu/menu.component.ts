@@ -82,7 +82,6 @@ export class SysMenuComponent implements OnInit {
   load() {
     this.menuService.get().subscribe((data: any) => {
       this.listOfMapData = data.list.children;
-      console.log(this.listOfMapData);
       this.listOfMapData.forEach(item => {
         this.mapOfExpandedData[ item.id ] = this.convertTreeToList(item);
       })

@@ -23,11 +23,11 @@ export class MenuService {
 
   save(value: any): Observable<any> {
     let res: Observable<any>;
-    let menuCode = value.menuCode;
-    if ( menuCode === undefined ) {
+    let id = value.id;
+    if ( id === undefined ) {
       res = this.http.post(`/sys/menu`, value);
     } else {
-      res = this.http.put(`/sys/menu/${menuCode}`, value);
+      res = this.http.put(`/sys/menu/${value.menuCode}`, value);
     }
     return res;
   }
