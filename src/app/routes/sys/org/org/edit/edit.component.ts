@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFComponent } from '@delon/form';
 import { OrgService } from '../org.service';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { ModuleService } from 'app/routes/sys/setting/module/module.service';
   templateUrl: './edit.component.html',
 })
 export class SysOrgOrgEditComponent implements OnInit {
-  
+  @ViewChild('sf') sf: SFComponent;
   @Input() record: any;
   i: any;
   status = [
@@ -55,13 +55,16 @@ export class SysOrgOrgEditComponent implements OnInit {
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
-    private orgService: OrgService,
-    private moduleService: ModuleService
+    private orgService: OrgService
   ) {}
   
   ngOnInit(): void {
     if(this.record !== undefined) {
-      this.i = this.record
+      this.i = this.record;
+      // 以下为临时解决办法，初次赋值时，上级机构不会显示
+      setTimeout(() => {
+        this.sf.setValue('/parentCode', this.record.parentCode);
+      }, 500);
     } else {
       this.i = {};
     }

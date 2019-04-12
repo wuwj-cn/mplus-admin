@@ -68,6 +68,7 @@ export class SysSettingMenuEditComponent implements OnInit {
       // this.menuService.getByCode(this.record.menuCode)
       //                 .subscribe(res => this.i = res);
       this.i = this.record;
+      console.log('this.i = this.record');
     } else {
       this.i = {};
     }
