@@ -12,7 +12,6 @@ import { SysOrgDeptEditComponent } from './org/dept/edit/edit.component';
 import { SysOrgDeptViewComponent } from './org/dept/view/view.component';
 import { SysOrgComponent } from './org/org/org.component';
 import { SysOrgOrgEditComponent } from './org/org/edit/edit.component';
-import { SysOrgOrgViewComponent } from './org/org/view/view.component';
 
 const COMPONENTS = [
   SysModuleComponent,
@@ -26,8 +25,7 @@ const COMPONENTS_NOROUNT = [
   SysSettingMenuEditComponent,
   SysOrgDeptEditComponent,
   SysOrgDeptViewComponent,
-  SysOrgOrgEditComponent,
-  SysOrgOrgViewComponent];
+  SysOrgOrgEditComponent];
 
 @NgModule({
   imports: [
