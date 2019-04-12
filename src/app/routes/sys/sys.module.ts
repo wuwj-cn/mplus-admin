@@ -7,9 +7,6 @@ import { SysUserComponent } from './org/user/user.component';
 import { SysPostComponent } from './org/post/post.component';
 import { SysSettingModuleEditComponent } from './setting/module/edit/edit.component';
 import { SysSettingMenuEditComponent } from './setting/menu/edit/edit.component';
-import { SysDeptComponent } from './org/dept/dept.component';
-import { SysOrgDeptEditComponent } from './org/dept/edit/edit.component';
-import { SysOrgDeptViewComponent } from './org/dept/view/view.component';
 import { SysOrgComponent } from './org/org/org.component';
 import { SysOrgOrgEditComponent } from './org/org/edit/edit.component';
 
@@ -18,13 +15,10 @@ const COMPONENTS = [
   SysMenuComponent,
   SysUserComponent,
   SysPostComponent,
-  SysDeptComponent,
   SysOrgComponent];
 const COMPONENTS_NOROUNT = [
   SysSettingModuleEditComponent,
   SysSettingMenuEditComponent,
-  SysOrgDeptEditComponent,
-  SysOrgDeptViewComponent,
   SysOrgOrgEditComponent];
 
 @NgModule({

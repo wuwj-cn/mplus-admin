@@ -58,11 +58,6 @@
               "i18n": "sys.org.org"
             },
             {
-              "text": "部门管理",
-              "link": "/sys/dept",
-              "i18n": "sys.org.dept"
-            },
-            {
               "text": "岗位管理",
               "link": "/sys/post",
               "i18n": "sys.org.post"
