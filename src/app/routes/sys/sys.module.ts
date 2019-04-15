@@ -10,18 +10,24 @@ import { SysOrgComponent } from './org/org/org.component';
 import { SysOrgOrgEditComponent } from './org/org/edit/edit.component';
 import { SysPostComponent } from './org/post/post.component';
 import { SysOrgPostEditComponent } from './org/post/edit/edit.component';
+import { SysDictComponent } from './setting/dict/dict.component';
+import { SysSettingDictEditComponent } from './setting/dict/edit/edit.component';
+import { SysSettingDictViewComponent } from './setting/dict/view/view.component';
 
 const COMPONENTS = [
   SysModuleComponent,
   SysMenuComponent,
   SysUserComponent,
   SysOrgComponent,
-  SysPostComponent];
+  SysPostComponent,
+  SysDictComponent];
 const COMPONENTS_NOROUNT = [
   SysSettingModuleEditComponent,
   SysSettingMenuEditComponent,
   SysOrgOrgEditComponent,
-  SysOrgPostEditComponent];
+  SysOrgPostEditComponent,
+  SysSettingDictEditComponent,
+  SysSettingDictViewComponent];
 
 @NgModule({
   imports: [

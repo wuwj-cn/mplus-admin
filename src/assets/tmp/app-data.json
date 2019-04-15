@@ -36,9 +36,9 @@
               "i18n": "sys.menu"
             },
             {
-              "text": "参数设置",
-              "link": "/sys/param",
-              "i18n": "sys.param_setting"
+              "text": "字典管理",
+              "link": "/sys/dict",
+              "i18n": "sys.dict"
             }
           ]
         },
