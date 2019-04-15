@@ -3,7 +3,32 @@
     <button (click)="add()" nz-button nzType="primary">新建</button>
   </ng-template>
 </page-header>
-<nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="url" [columns]="columns"></st>
-</nz-card>
+<nz-layout>
+  <nz-sider nzWidth="250" style="background:#fff;">
+    <nz-card nzTitle="Card title" [nzExtra]="extraTemplate">
+      <nz-input-group [nzSuffix]="suffixIcon">
+        <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue">
+      </nz-input-group>
+      <ng-template #suffixIcon>
+        <i nz-icon type="search"></i>
+      </ng-template>
+      <nz-tree
+        [nzData]="nodes"
+        [nzSearchValue]="searchValue"
+        (nzClick)="nzEvent($event)"
+        (nzExpandChange)="nzEvent($event)"
+        (nzSearchValueChange)="nzEvent($event)">
+      </nz-tree>
+    </nz-card>
+    <ng-template #extraTemplate>
+      <a>More</a>
+    </ng-template>
+  </nz-sider>
+  <nz-layout style="padding: 0px 0px 0px 12px;">
+    <nz-card style="margin-bottom: 0px;">
+      <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
+      <st #st [data]="url" [columns]="columns"></st>
+    </nz-card>
+  </nz-layout>
+</nz-layout>
+

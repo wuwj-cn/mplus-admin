@@ -46,7 +46,7 @@
   "sys.sys_setting": "系统设置",
   "sys.menu": "菜单管理",
   "sys.module": "模块管理",
-  "sys.param_setting": "参数设置",
+  "sys.dict": "字典管理",
 
   "sys.org_manage": "组织管理",
   "sys.org.user": "用户管理",
