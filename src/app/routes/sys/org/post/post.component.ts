@@ -8,25 +8,25 @@ import { SFSchema } from '@delon/form';
   templateUrl: './post.component.html',
 })
 export class SysPostComponent implements OnInit {
-  url = `/user`;
+  url = `/sys/post`;
   searchSchema: SFSchema = {
     properties: {
-      no: {
+      postName: {
         type: 'string',
-        title: '编号'
+        title: '岗位名称'
       }
     }
   };
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'no' },
-    { title: '调用次数', type: 'number', index: 'callNo' },
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '时间', type: 'date', index: 'updatedAt' },
+    { title: '岗位名称', index: 'postName' },
+    { title: '岗位编码', index: 'postCode' },
+    { title: '岗位分类', index: 'postType' },
+    { title: '状态', index: 'status' },
     {
-      title: '',
+      title: '操作',
       buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
+        { text: '查看', click: (item: any) => `/form/${item.id}` },
         // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
       ]
     }
