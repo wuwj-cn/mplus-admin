@@ -34,6 +34,7 @@ for(let i = 0; i < 2; i++) {
   }
 }
 
+//广度优先生成树
 function genTree(orgCode: string) {
   let nodes = [...data];
   let node = nodes.find(w => w.orgCode === orgCode);

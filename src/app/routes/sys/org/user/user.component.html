@@ -4,8 +4,12 @@
   </ng-template>
 </page-header>
 <nz-layout>
-  <nz-sider nzWidth="250" style="background:#fff;">
-    <nz-card nzTitle="Card title" [nzExtra]="extraTemplate">
+  <nz-sider nzWidth="250" style="background:#fff;" 
+    nzCollapsible
+    [(nzCollapsed)]="isCollapsed"
+    [nzCollapsedWidth]="0"
+    [nzZeroTrigger]="zeroTrigger">
+    <nz-card nzTitle="组织机构" [nzExtra]="extraTemplate">
       <nz-input-group [nzSuffix]="suffixIcon">
         <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue">
       </nz-input-group>
@@ -14,6 +18,7 @@
       </ng-template>
       <nz-tree
         [nzData]="nodes"
+        nzAsyncData
         [nzSearchValue]="searchValue"
         (nzClick)="nzEvent($event)"
         (nzExpandChange)="nzEvent($event)"
@@ -22,6 +27,12 @@
     </nz-card>
     <ng-template #extraTemplate>
       <a>More</a>
+    </ng-template>
+    <ng-template #zeroTrigger>
+      <div class="zeroIcon">
+        <i *ngIf="isCollapsed" nz-icon nzType="caret-right" nzTheme="outline"></i>
+        <i *ngIf="!isCollapsed" nz-icon nzType="caret-left" nzTheme="outline"></i>
+      </div>
     </ng-template>
   </nz-sider>
   <nz-layout style="padding: 0px 0px 0px 12px;">

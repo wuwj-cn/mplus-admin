@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { Observable } from 'rxjs';
+import { NzTreeNodeOptions } from 'ng-zorro-antd';
 
 @Injectable({
     providedIn: 'root'
@@ -33,5 +34,27 @@ export class OrgService {
 
     delete(orgCode: string): Observable<any> {
         return this.http.delete(`/sys/org/${orgCode}`);
+    }
+
+    /**
+     * 返回结果不包含根节点
+     */
+    getOrgTree(result: NzTreeNodeOptions[]) {
+        this.get().subscribe(res => {
+            res.list.children.forEach((node: any) => {
+                result.push(this.convertTree(node));
+            });
+        });
+    }
+
+    private convertTree(node: any): NzTreeNodeOptions {
+        let result: NzTreeNodeOptions = {title: node.orgName, key: node.orgCode, children: [], expanded: false};
+        if(node.children.length !== 0) {
+            node.children.forEach((item: any) => {
+                result.children.push(this.convertTree(item));
+            });
+        }
+        if(result.children.length == 0) result.isLeaf = true;
+        return result;
     }
 }

@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent } from '@delon/abc';
 import { SFSchema } from '@delon/form';
-import { NzFormatEmitEvent } from 'ng-zorro-antd';
+import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd';
+import { OrgService } from '../org/org.service';
 
 @Component({
   selector: 'app-sys-user',
   templateUrl: './user.component.html',
+  styleUrls: ['./user.component.less']
 })
-export class SysUserComponent implements OnInit {
+export class SysUserComponent implements OnInit, AfterViewInit {
   url = `/user`;
   searchSchema: SFSchema = {
     properties: {
@@ -33,19 +35,26 @@ export class SysUserComponent implements OnInit {
     }
   ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  constructor(
+    private http: _HttpClient, 
+    private modal: ModalHelper,
+    private orgService: OrgService) { }
 
-  ngOnInit() { }
+  isCollapsed = false;
+  searchValue = '';
+  nodes = [];
 
-  add() {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+  ngOnInit() { 
+    // this.nodes = this._nodes;
+    // console.log(this.nodes.length);
   }
 
-  searchValue = '';
+  ngAfterViewInit(): void {
+    this.orgService.getOrgTree(this.nodes);
+    console.log(this.nodes.length);
+  }
 
-  nodes = [ {
+  _nodes = [ {
     title   : '0-0',
     key     : '0-0',
     children: [ {
@@ -82,6 +91,12 @@ export class SysUserComponent implements OnInit {
     key   : '0-2',
     isLeaf: true
   } ];
+
+  add() {
+    // this.modal
+    //   .createStatic(FormEditComponent, { i: { id: 0 } })
+    //   .subscribe(() => this.st.reload());
+  }
 
   nzEvent(event: NzFormatEmitEvent): void {
     console.log(event);
