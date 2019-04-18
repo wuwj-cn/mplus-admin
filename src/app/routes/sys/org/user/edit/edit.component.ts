@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
+import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema } from '@delon/form';
+import { OrgService } from '../../org/org.service';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-sys-org-user-edit',
@@ -12,28 +16,31 @@ export class SysOrgUserEditComponent implements OnInit {
   i: any;
   schema: SFSchema = {
     properties: {
-      no: { type: 'string', title: '编号' },
-      owner: { type: 'string', title: '姓名', maxLength: 15 },
-      callNo: { type: 'number', title: '调用次数' },
-      href: { type: 'string', title: '链接', format: 'uri' },
-      description: { type: 'string', title: '描述', maxLength: 140 },
+      orgCode: { type: 'string', title: '归属机构' },
+      userId: { type: 'string', title: '登录账号' },
+      nickName: { type: 'string', title: '用户昵称' },
+      userName: { type: 'string', title: '用户名称' },
+      email: { type: 'string', title: '电子邮箱', format: 'email' },
+      remark: { type: 'string', title: '备注' },
     },
-    required: ['owner', 'callNo', 'href', 'description'],
+    required: ['orgCode', 'userId', 'userName', 'email'],
   };
   ui: SFUISchema = {
     '*': {
       spanLabelFixed: 100,
       grid: { span: 12 },
     },
-    $no: {
-      widget: 'text'
+    $orgCode: {
+      widget: 'tree-select', 
+      asyncData: () => of(this.orgService.getOrgTreeByParent()).pipe(delay(300)),
+      expandChange: (e: NzFormatEmitEvent) => {
+        return of(this.orgService.getOrgTreeByParent(e.node.key)).pipe(delay(300));
+      }
     },
-    $href: {
-      widget: 'string',
-    },
-    $description: {
+    $remark: {
       widget: 'textarea',
       grid: { span: 24 },
+      autosize: { minRows: 2, maxRows: 6 }
     },
   };
 
@@ -41,15 +48,18 @@ export class SysOrgUserEditComponent implements OnInit {
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
+    private userService: UserService,
+    private orgService: OrgService
   ) {}
 
   ngOnInit(): void {
-    if (this.record.id > 0)
-    this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
+    // if (this.record.id > 0)
+    // this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
+    this.i = {};
   }
 
   save(value: any) {
-    this.http.post(`/user/${this.record.id}`, value).subscribe(res => {
+    this.userService.save(value).subscribe(res => {
       this.msgSrv.success('保存成功');
       this.modal.close(true);
     });

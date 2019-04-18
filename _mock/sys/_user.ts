@@ -1,26 +1,20 @@
 import { MockRequest } from '@delon/mock';
 
 const list = [];
-const total = 50;
+const total = 10;
 
 for (let i = 0; i < total; i += 1) {
   list.push({
     id: i + 1,
-    disabled: i % 6 === 0,
-    href: 'https://ant.design',
-    avatar: [
-      'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-      'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
-    ][i % 2],
-    no: `TradeCode ${i}`,
-    title: `一个任务名称 ${i}`,
-    owner: '曲丽丽',
-    description: '这是一段描述',
-    callNo: Math.floor(Math.random() * 1000),
-    status: Math.floor(Math.random() * 10) % 4,
+    userId: i + 1,
+    nickName: 'user_' + i,
+    userName: 'user_' + i,
+    orgCode: '0101',
+    orgName: 'org_0101',
+    email: '123@qq.com',
+    status: Math.floor(Math.random() * 10) % 3,
     updatedAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
     createdAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
-    progress: Math.ceil(Math.random() * 100),
   });
 }
 
@@ -30,24 +24,35 @@ function genData(params: any) {
     ps = +params.ps,
     start = (pi - 1) * ps;
 
-  if (params.no) {
-    ret = ret.filter(data => data.no.indexOf(params.no) > -1);
+  if (params.userId) {
+    ret = ret.filter(data => data.userId.indexOf(params.userId) > -1);
   }
 
   return { total: ret.length, list: ret.slice(start, ps * pi) };
 }
 
-function saveData(id: number, value: any) {
+function saveData(value: any) {
+  let ran_id = list.length + 1;
+  const item = {
+    id: ran_id,
+  };
+  Object.assign(item, value);
+  list.push(item);
+  return { msg: 'ok', data: item };
+}
+
+function updateData(id: number, value: any) {
   const item = list.find(w => w.id === id);
   if (!item) return { msg: '无效用户信息' };
   Object.assign(item, value);
-  return { msg: 'ok' };
+  return { msg: 'ok', data: item };
 }
 
 export const USERS = {
-  '/user': (req: MockRequest) => genData(req.queryString),
-  '/user/:id': (req: MockRequest) => list.find(w => w.id === +req.params.id),
-  'POST /user/:id': (req: MockRequest) => saveData(+req.params.id, req.body),
+  'GET /sys/user': (req: MockRequest) => genData(req.queryString),
+  'GET /sys/user/:id': (req: MockRequest) => list.find(w => w.id === +req.params.id),
+  'POST /sys/user': (req: MockRequest) => saveData(req.body),
+  'PUT /sys/user/:id': (req: MockRequest) => updateData(+req.params.id, req.body),
   '/user/current': {
     name: 'Cipchk',
     avatar:

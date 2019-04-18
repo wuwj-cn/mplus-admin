@@ -36,25 +36,13 @@ export class OrgService {
         return this.http.delete(`/sys/org/${orgCode}`);
     }
 
-    /**
-     * 返回结果不包含根节点
-     */
-    getOrgTree(result: NzTreeNodeOptions[]) {
-        this.get().subscribe(res => {
-            res.list.children.forEach((node: any) => {
-                result.push(this.convertTree(node));
-            });
+    getOrgTreeByParent(parentOrgCode: string = '0'): any[] {
+        let nodes = [];
+        this.getChildren(parentOrgCode).subscribe((data: any) => {
+          data.list.children.forEach((item: any) => {
+            nodes.push({ title: item.orgName, key: item.orgCode })
+          });
         });
-    }
-
-    private convertTree(node: any): NzTreeNodeOptions {
-        let result: NzTreeNodeOptions = {title: node.orgName, key: node.orgCode, children: [], expanded: false};
-        if(node.children.length !== 0) {
-            node.children.forEach((item: any) => {
-                result.children.push(this.convertTree(item));
-            });
-        }
-        if(result.children.length == 0) result.isLeaf = true;
-        return result;
-    }
+        return nodes;
+      }
 }
