@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent } from '@delon/abc';
 import { SFSchema } from '@delon/form';
-import { NzFormatEmitEvent, NzTreeNodeOptions, NzTreeNode } from 'ng-zorro-antd';
+import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd';
 import { OrgService } from '../org/org.service';
 import { SysOrgUserEditComponent } from './edit/edit.component';
 
@@ -11,7 +11,7 @@ import { SysOrgUserEditComponent } from './edit/edit.component';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less']
 })
-export class SysUserComponent implements OnInit, AfterViewInit {
+export class SysUserComponent implements OnInit {
   url = `/sys/user`;
   searchSchema: SFSchema = {
     properties: {
@@ -69,10 +69,6 @@ export class SysUserComponent implements OnInit, AfterViewInit {
     }
     if(result.children.length == 0) result.isLeaf = true;
     return result;
-  }
-
-  ngAfterViewInit(): void {
-    
   }
 
   add(item?: any) {
