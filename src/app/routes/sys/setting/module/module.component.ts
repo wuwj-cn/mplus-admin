@@ -38,7 +38,7 @@ export class SysModuleComponent implements OnInit {
     },
   };
 
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '模块名称', index: 'moduleName' },
     { title: '模块编码', index: 'moduleCode' },

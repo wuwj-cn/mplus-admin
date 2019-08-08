@@ -20,7 +20,7 @@ export class SysUserComponent implements OnInit {
       email: { type: 'string', title: '电子邮箱' }
     }
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '登录账号', index: 'userId' },
     { title: '用户昵称', index: 'nickName' },

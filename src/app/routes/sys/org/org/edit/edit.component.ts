@@ -12,7 +12,7 @@ import { ModuleService } from 'app/routes/sys/setting/module/module.service';
   templateUrl: './edit.component.html',
 })
 export class SysOrgOrgEditComponent implements OnInit {
-  @ViewChild('sf') sf: SFComponent;
+  @ViewChild('sf', { static: false }) sf: SFComponent;
   @Input() record: any;
   i: any;
   status = [

@@ -58,6 +58,7 @@ export function fnDelonAuthConfig(): DelonAuthConfig {
 }
 
 import { STConfig } from '@delon/abc';
+import { DelonACLModule } from '@delon/acl';
 export function fnSTConfig(): STConfig {
   return {
     ...new STConfig(),
@@ -79,6 +80,7 @@ const GLOBAL_CONFIG_PROVIDES = [
 @NgModule({
   imports: [
     AlainThemeModule.forRoot(),
+    DelonACLModule.forRoot(),
     ...MOCK_MODULES,
   ],
 })

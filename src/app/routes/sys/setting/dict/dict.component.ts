@@ -17,7 +17,7 @@ export class SysDictComponent implements OnInit {
       }
     }
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '编号', index: 'no' },
     { title: '调用次数', type: 'number', index: 'callNo' },

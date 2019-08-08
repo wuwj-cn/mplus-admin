@@ -17,7 +17,7 @@ export class SysPostComponent implements OnInit {
       }
     }
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '岗位名称', index: 'postName' },
     { title: '岗位编码', index: 'postCode' },

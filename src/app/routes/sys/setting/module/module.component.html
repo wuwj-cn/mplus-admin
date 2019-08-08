@@ -4,7 +4,7 @@
   </ng-template>
 </page-header>
 <nz-card>
-  <sf #sf mode="search"  [schema]="searchSchema" [ui]="ui" [button]="none" (formSubmit)="st.reset($event)" >
+  <sf #sf mode="search"  [schema]="searchSchema" [ui]="ui" [button]="'none'" (formSubmit)="st.reset($event)" >
     <button type="submit" nz-button [nzType]="'primary'" [nzLoading]="loading">查询</button>
     <button (click)="sf.reset()" type="button" nz-button>重置</button>
     <a (click)="expandForm=!expandForm">

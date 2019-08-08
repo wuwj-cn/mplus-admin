@@ -36,7 +36,7 @@ export class SysOrgComponent implements OnInit {
       }
     }
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: false }) st: STComponent;
 
   constructor(
     private modal: ModalHelper,
