@@ -8,21 +8,21 @@ import { I18NService } from '@core';
 @Component({
   selector: 'header-i18n',
   template: `
-  <nz-dropdown nzPlacement="bottomRight">
-    <div *ngIf="showLangText" nz-dropdown>
-      <i nz-icon type="global"></i>
-      {{ 'menu.lang' | translate}}
-      <i nz-icon type="down"></i>
-    </div>
-    <i *ngIf="!showLangText" nz-dropdown nz-icon type="global"></i>
+  <div nz-dropdown *ngIf="showLangText" nzPlacement="bottomRight" [nzDropdownMenu]="menuTpl">
+    <i nz-icon nzType="global"></i>
+    {{ 'menu.lang' | translate}}
+    <i nz-icon nzType="down"></i>
+  </div>
+  <i *ngIf="!showLangText" nz-dropdown nz-icon nzType="global"></i>
+  <nz-dropdown-menu #menuTpl="nzDropdownMenu">
     <ul nz-menu>
       <li nz-menu-item *ngFor="let item of langs" [nzSelected]="item.code === curLangCode"
         (click)="change(item.code)">
-          <span role="img" [attr.aria-label]="item.text" class="pr-xs">{{item.abbr}}</span>
+        <span role="img" [attr.aria-label]="item.text" class="pr-xs">{{item.abbr}}</span>
           {{item.text}}
       </li>
     </ul>
-  </nz-dropdown>
+  </nz-dropdown-menu>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

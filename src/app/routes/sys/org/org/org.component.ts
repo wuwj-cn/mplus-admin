@@ -44,7 +44,7 @@ export class SysOrgComponent implements OnInit {
     private orgService: OrgService) { }
 
   listOfMapData = [];
-  mapOfExpandedData: { [ key: string ]: TreeNode[] } = {};
+  mapOfExpandedData: { [key: string]: TreeNode[] } = {};
 
   ngOnInit() {
     this.load();
@@ -52,11 +52,25 @@ export class SysOrgComponent implements OnInit {
 
   load() {
     this.orgService.get().subscribe((data: any) => {
-      this.listOfMapData = data.list.children;
+      let nodes = this.genTree("0", data.data);
+      console.log(nodes);
+      this.listOfMapData = nodes.list.children;
       this.listOfMapData.forEach(item => {
-        this.mapOfExpandedData[ item.id ] = this.convertTreeToList(item);
+        this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
       })
-    }); 
+    });
+  }
+
+  //广度优先生成树
+  genTree(orgCode: string, data: [any]) {
+    let nodes = [...data];
+    let node = nodes.find(w => w.orgCode === orgCode);
+    let children = nodes.filter(w => (w.parentCode === orgCode));
+    if (children.length > 0) {
+      node.children = [...children];
+      node.children.forEach((item: any) => this.genTree(item.orgCode, data));
+    }
+    return node;
   }
 
   add(item?: any) {
@@ -90,7 +104,7 @@ export class SysOrgComponent implements OnInit {
       this.visitNode(node, hashMap, array);
       if (node.children) {
         for (let i = node.children.length - 1; i >= 0; i--) {
-          stack.push({ ...node.children[ i ], level: node.level + 1, expand: false, parent: node });
+          stack.push({ ...node.children[i], level: node.level + 1, expand: false, parent: node });
         }
       }
     }
@@ -98,9 +112,9 @@ export class SysOrgComponent implements OnInit {
     return array;
   }
 
-  visitNode(node: TreeNode, hashMap: { [ key: string ]: any }, array: TreeNode[]): void {
-    if (!hashMap[ node.id ]) {
-      hashMap[ node.id ] = true;
+  visitNode(node: TreeNode, hashMap: { [key: string]: any }, array: TreeNode[]): void {
+    if (!hashMap[node.id]) {
+      hashMap[node.id] = true;
       array.push(node);
     }
   }
