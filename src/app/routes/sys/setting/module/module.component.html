@@ -9,7 +9,7 @@
     <button (click)="sf.reset()" type="button" nz-button>重置</button>
     <a (click)="expandForm=!expandForm">
       {{expandForm ? '收起' : '展开'}}
-      <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
+      <i nz-icon [nzType]="expandForm ? 'down' : 'up'"></i>
     </a> 
   </sf>
   <st #st [data]="url" [columns]="columns" [page]="page" [ps]="5">

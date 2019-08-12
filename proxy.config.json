@@ -1,5 +1,11 @@
 {
-    "/api":{
-      "target":"http://localhost:8080/"
+  "/system": {
+    "target": "http://localhost:9004/system",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/system": ""
     }
   }
+}

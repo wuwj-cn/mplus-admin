@@ -1,11 +1,21 @@
 @import '~@delon/theme/styles/default';
 
-.zeroIcon {
+// nz-input-group {
+    // padding: 5px 0;
+// }
+::ng-deep .ant-layout-sider-zero-width-trigger {
+    right: -12px;
     width: 12px;
-    font-size: 12px;
-    margin-right: -6px;
 }
 
-nz-input-group {
-    padding: 10px 0;
+.trigger {
+    font-size: 12px;
+    line-height: 32px;
+    padding: 0 0px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.trigger:hover {
+    color: #1890ff; 
 }

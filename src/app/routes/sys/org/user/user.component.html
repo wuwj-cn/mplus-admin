@@ -1,41 +1,30 @@
 <page-header [action]="phActionTpl" autoBreadcrumb="false">
   <ng-template #phActionTpl>
     <button (click)="add()" nz-button nzType="primary">新建</button>
-  </ng-template> 
+  </ng-template>
 </page-header>
 <nz-layout>
-  <nz-sider nzWidth="250" style="background:#fff;" 
-    nzCollapsible
-    [(nzCollapsed)]="isCollapsed"
-    [nzCollapsedWidth]="0"
-    [nzZeroTrigger]="zeroTrigger">
-    <nz-card nzTitle="组织机构" [nzExtra]="extraTemplate">
-      <nz-input-group [nzSuffix]="suffixIcon">
-        <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue">
-      </nz-input-group>
-      <ng-template #suffixIcon>
-        <i nz-icon type="search"></i>
+  <nz-sider nzTheme="light" nzCollapsible [(nzCollapsed)]="isCollapsed" [nzCollapsedWidth]="0"
+    [nzZeroTrigger]="mZeroTrigger">
+    <div nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <nz-card nzTitle="组织机构" [nzExtra]="extraTemplate">
+        <nz-input-group [nzSuffix]="suffixIcon">
+          <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue">
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i nz-icon type="search"></i>
+        </ng-template>
+        <nz-tree [nzData]="nodes" nzAsyncData nzShowLine nzShowIcon [nzSearchValue]="searchValue"
+          (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)" (nzSearchValueChange)="nzEvent($event)">
+        </nz-tree>
+      </nz-card>
+      <ng-template #extraTemplate>
+        <a>More</a>
       </ng-template>
-      <nz-tree
-        [nzData]="nodes"
-        nzAsyncData
-        nzShowLine
-        nzShowIcon
-        [nzSearchValue]="searchValue"
-        (nzClick)="nzEvent($event)"
-        (nzExpandChange)="nzEvent($event)"
-        (nzSearchValueChange)="nzEvent($event)">
-      </nz-tree>
-    </nz-card>
-    <ng-template #extraTemplate>
-      <a>More</a>
-    </ng-template>
-    <ng-template #zeroTrigger>
-      <div class="zeroIcon">
-        <i *ngIf="isCollapsed" nz-icon nzType="caret-right" nzTheme="outline"></i>
-        <i *ngIf="!isCollapsed" nz-icon nzType="caret-left" nzTheme="outline"></i>
-      </div>
-    </ng-template>
+      <ng-template #mZeroTrigger>
+        <i class="trigger" nz-icon [nzType]="isCollapsed ? 'caret-right' : 'caret-left'"></i>
+      </ng-template>
+    </div>
   </nz-sider>
   <nz-layout style="padding: 0px 0px 0px 12px;">
     <nz-card style="margin-bottom: 0px;">
@@ -44,4 +33,3 @@
     </nz-card>
   </nz-layout>
 </nz-layout>
-
