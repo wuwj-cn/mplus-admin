@@ -51,27 +51,16 @@ export class SysOrgComponent implements OnInit {
   }
 
   load() {
-    this.orgService.get().subscribe((data: any) => {
-      let nodes = this.genTree("0", data.data);
-      console.log(nodes);
-      this.listOfMapData = nodes.list.children;
+    this.orgService.get().subscribe((ret: any) => {
+      let nodes = this.orgService.genTree("0", ret.data);
+      this.listOfMapData = nodes.children;
       this.listOfMapData.forEach(item => {
         this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
       })
     });
   }
 
-  //广度优先生成树
-  genTree(orgCode: string, data: [any]) {
-    let nodes = [...data];
-    let node = nodes.find(w => w.orgCode === orgCode);
-    let children = nodes.filter(w => (w.parentCode === orgCode));
-    if (children.length > 0) {
-      node.children = [...children];
-      node.children.forEach((item: any) => this.genTree(item.orgCode, data));
-    }
-    return node;
-  }
+  
 
   add(item?: any) {
     this.modal.createStatic(SysOrgOrgEditComponent, { record: item }).subscribe(() => {
