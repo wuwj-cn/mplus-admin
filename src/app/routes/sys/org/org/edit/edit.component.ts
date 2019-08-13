@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema, SFComponent } from '@delon/form';
+import { SFSchema, SFUISchema, SFComponent, SFTreeSelectWidgetSchema } from '@delon/form';
 import { OrgService } from '../org.service';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -14,6 +14,7 @@ export class SysOrgOrgEditComponent implements OnInit {
   @ViewChild('sf', { static: false }) sf: SFComponent;
   @Input() record: any;
   i: any;
+
   status = [
     { value: '0', label: '正常', type: 'success' },
     { value: '1', label: '删除', type: 'error' },
@@ -22,11 +23,19 @@ export class SysOrgOrgEditComponent implements OnInit {
 
   schema: SFSchema = {
     properties: {
-      parentOrgCode: { type: 'string', title: '上级机构' },
+      parentOrgCode: {
+        type: 'string', title: '上级机构', ui: {
+          widget: 'tree-select',
+          asyncData: () => of(this.getOrgTree()).pipe(delay(500)),
+          expandChange: (e: NzFormatEmitEvent) => {
+            return of(this.getOrgTree(e.node.key)).pipe(delay(500));
+          }
+        } as SFTreeSelectWidgetSchema,
+      },
       orgCode: { type: 'string', title: '机构编码' },
       orgName: { type: 'string', title: '机构名称' },
       fullName: { type: 'string', title: '机构全称' },
-      status: { type: 'string', title: '状态', enum: this.status, default: '0', ui: { widget: 'select'} },
+      status: { type: 'string', title: '状态', enum: this.status, default: '0', ui: { widget: 'select' } },
       remark: { type: 'string', title: '备注' },
     },
     required: ['orgCode', 'orgName'],
@@ -35,13 +44,6 @@ export class SysOrgOrgEditComponent implements OnInit {
     '*': {
       spanLabelFixed: 100,
       grid: { span: 12 },
-    },
-    $parentOrgCode: {
-      widget: 'tree-select', 
-      asyncData: () => of(this.getOrgTree()).pipe(delay(300)),
-      expandChange: (e: NzFormatEmitEvent) => {
-        return of(this.getOrgTree(e.node.key)).pipe(delay(300));
-      }
     },
     $remark: {
       widget: 'textarea',
@@ -54,11 +56,11 @@ export class SysOrgOrgEditComponent implements OnInit {
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
-    private orgService: OrgService
-  ) {}
-  
+    private orgService: OrgService,
+  ) { }
+
   ngOnInit(): void {
-    if(this.record !== undefined) {
+    if (this.record !== undefined) {
       this.i = this.record;
       // 以下为临时解决办法，初次赋值时，上级机构不会显示
       setTimeout(() => {
@@ -72,8 +74,9 @@ export class SysOrgOrgEditComponent implements OnInit {
   getOrgTree(orgCode: string = '0'): any[] {
     let nodes = [];
     this.orgService.getChildren(orgCode).subscribe((ret: any) => {
-      let tree = this.orgService.genTree(orgCode, ret.data);
-      tree.children.forEach((item: any) => {
+      let children = ret.data;
+      console.log(children);
+      children.forEach((item: any) => {
         nodes.push({ title: item.orgName, key: item.orgCode })
       });
     });
