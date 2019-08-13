@@ -41,10 +41,22 @@ export class OrgService {
     getOrgTreeByParent(parentOrgCode: string = '0'): any[] {
         let nodes = [];
         this.getChildren(parentOrgCode).subscribe((data: any) => {
-          data.list.children.forEach((item: any) => {
-            nodes.push({ title: item.orgName, key: item.orgCode })
-          });
+            data.list.children.forEach((item: any) => {
+                nodes.push({ title: item.orgName, key: item.orgCode })
+            });
         });
         return nodes;
-      }
+    }
+
+    //广度优先生成树
+    genTree(orgCode: string, data: [any]) {
+        let nodes = [...data];
+        let node = nodes.find(w => w.orgCode === orgCode);
+        let children = nodes.filter(w => (w.parentOrgCode === orgCode));
+        if (children.length > 0) {
+            node.children = [...children];
+            node.children.forEach((item: any) => this.genTree(item.orgCode, data));
+        }
+        return node;
+    }
 }

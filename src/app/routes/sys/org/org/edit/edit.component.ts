@@ -5,7 +5,6 @@ import { SFSchema, SFUISchema, SFComponent } from '@delon/form';
 import { OrgService } from '../org.service';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ModuleService } from 'app/routes/sys/setting/module/module.service';
 
 @Component({
   selector: 'app-sys-org-org-edit',
@@ -23,7 +22,7 @@ export class SysOrgOrgEditComponent implements OnInit {
 
   schema: SFSchema = {
     properties: {
-      parentCode: { type: 'string', title: '上级机构' },
+      parentOrgCode: { type: 'string', title: '上级机构' },
       orgCode: { type: 'string', title: '机构编码' },
       orgName: { type: 'string', title: '机构名称' },
       fullName: { type: 'string', title: '机构全称' },
@@ -37,7 +36,7 @@ export class SysOrgOrgEditComponent implements OnInit {
       spanLabelFixed: 100,
       grid: { span: 12 },
     },
-    $parentCode: {
+    $parentOrgCode: {
       widget: 'tree-select', 
       asyncData: () => of(this.getOrgTree()).pipe(delay(300)),
       expandChange: (e: NzFormatEmitEvent) => {
@@ -63,7 +62,7 @@ export class SysOrgOrgEditComponent implements OnInit {
       this.i = this.record;
       // 以下为临时解决办法，初次赋值时，上级机构不会显示
       setTimeout(() => {
-        this.sf.setValue('/parentCode', this.record.parentCode);
+        this.sf.setValue('/parentOrgCode', this.record.parentOrgCode);
       }, 500);
     } else {
       this.i = {};
@@ -72,8 +71,9 @@ export class SysOrgOrgEditComponent implements OnInit {
 
   getOrgTree(orgCode: string = '0'): any[] {
     let nodes = [];
-    this.orgService.getChildren(orgCode).subscribe((data: any) => {
-      data.list.children.forEach((item: any) => {
+    this.orgService.getChildren(orgCode).subscribe((ret: any) => {
+      let tree = this.orgService.genTree(orgCode, ret.data);
+      tree.children.forEach((item: any) => {
         nodes.push({ title: item.orgName, key: item.orgCode })
       });
     });
