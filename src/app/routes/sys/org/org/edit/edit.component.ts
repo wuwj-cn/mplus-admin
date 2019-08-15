@@ -3,7 +3,7 @@ import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema, SFComponent } from '@delon/form';
 import { OrgService } from '../org.service';
-import { of } from 'rxjs';
+import { of, Subject, Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 @Component({
@@ -38,9 +38,9 @@ export class SysOrgOrgEditComponent implements OnInit {
     },
     $parentOrgCode: {
       widget: 'tree-select', 
-      asyncData: () => of(this.getOrgTree()).pipe(delay(300)),
+      asyncData: () => this.getOrgTree(),
       expandChange: (e: NzFormatEmitEvent) => {
-        return of(this.getOrgTree(e.node.key)).pipe(delay(300));
+        return this.getOrgTree(e.node.key);
       }
     },
     $remark: {
@@ -69,15 +69,17 @@ export class SysOrgOrgEditComponent implements OnInit {
     }
   }
 
-  getOrgTree(orgCode: string = '0'): any[] {
+  getOrgTree(orgCode: string = '0'): Observable<any[]> {
     let nodes = [];
+    var subject = new Subject<any[]>();
     this.orgService.getChildren(orgCode).subscribe((ret: any) => {
-      let tree = this.orgService.genTree(orgCode, ret.data);
-      tree.children.forEach((item: any) => {
+      let children = ret.data;
+      children.forEach((item: any) => {
         nodes.push({ title: item.orgName, key: item.orgCode })
       });
+      subject.next(nodes);
     });
-    return nodes;
+    return  subject.asObservable();;
   }
 
   save(value: any) {
