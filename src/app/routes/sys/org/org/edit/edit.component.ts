@@ -3,7 +3,7 @@ import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema, SFComponent, SFTreeSelectWidgetSchema } from '@delon/form';
 import { OrgService } from '../org.service';
-import { of } from 'rxjs';
+import { of, Subject, Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 @Component({
@@ -23,15 +23,7 @@ export class SysOrgOrgEditComponent implements OnInit {
 
   schema: SFSchema = {
     properties: {
-      parentOrgCode: {
-        type: 'string', title: '上级机构', ui: {
-          widget: 'tree-select',
-          asyncData: () => of(this.getOrgTree()).pipe(delay(500)),
-          expandChange: (e: NzFormatEmitEvent) => {
-            return of(this.getOrgTree(e.node.key)).pipe(delay(500));
-          }
-        } as SFTreeSelectWidgetSchema,
-      },
+      parentOrgCode: { type: 'string', title: '上级机构' },
       orgCode: { type: 'string', title: '机构编码' },
       orgName: { type: 'string', title: '机构名称' },
       fullName: { type: 'string', title: '机构全称' },
@@ -44,6 +36,13 @@ export class SysOrgOrgEditComponent implements OnInit {
     '*': {
       spanLabelFixed: 100,
       grid: { span: 12 },
+    },
+    $parentOrgCode: {
+      widget: 'tree-select', 
+      asyncData: () => this.getOrgTree(),
+      expandChange: (e: NzFormatEmitEvent) => {
+        return this.getOrgTree(e.node.key);
+      }
     },
     $remark: {
       widget: 'textarea',
@@ -71,16 +70,17 @@ export class SysOrgOrgEditComponent implements OnInit {
     }
   }
 
-  getOrgTree(orgCode: string = '0'): any[] {
+  getOrgTree(orgCode: string = '0'): Observable<any[]> {
     let nodes = [];
+    var subject = new Subject<any[]>();
     this.orgService.getChildren(orgCode).subscribe((ret: any) => {
       let children = ret.data;
-      console.log(children);
       children.forEach((item: any) => {
         nodes.push({ title: item.orgName, key: item.orgCode })
       });
+      subject.next(nodes);
     });
-    return nodes;
+    return  subject.asObservable();;
   }
 
   save(value: any) {
