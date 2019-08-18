@@ -12,7 +12,7 @@ import { SysOrgUserEditComponent } from './edit/edit.component';
   styleUrls: ['./user.component.less']
 })
 export class SysUserComponent implements OnInit {
-  url = `/sys/user`;
+  url = `system/v1/user`;
   searchSchema: SFSchema = {
     properties: {
       userId: { type: 'string', title: '登录账号' },
@@ -27,7 +27,7 @@ export class SysUserComponent implements OnInit {
     { title: '用户名称', index: 'userName' },
     { title: '组织机构', index: 'orgName' },
     { title: '电子邮箱', index: 'email' },
-    { title: '状态', index: 'status' },
+    { title: '状态', index: 'dataStatus' },
     {
       title: '操作',
       buttons: [
@@ -51,23 +51,24 @@ export class SysUserComponent implements OnInit {
   }
 
   getOrgTree() {
-    this.orgService.get().subscribe(res => {
-        let nodes = []
-        res.list.children.forEach((node: any) => {
-            nodes.push(this.convertTree(node));
-        });
-        this.nodes = nodes;
+    this.orgService.get().subscribe((res: any) => {
+      let nodes = []
+      let tree = this.orgService.genTree("0", res.data);
+      tree.children.forEach((node: any) => {
+        nodes.push(this.convertTree(node));
+      });
+      this.nodes = nodes;
     });
   }
 
   convertTree(node: any): NzTreeNodeOptions {
     let result: NzTreeNodeOptions = {title: node.orgName, key: node.orgCode, children: [], expanded: false};
-    if(node.children.length !== 0) {
+    if(node.children != undefined && node.children.length !== 0) {
         node.children.forEach((item: any) => {
             result.children.push(this.convertTree(item));
         });
     }
-    if(result.children.length == 0) result.isLeaf = true;
+    if(node.children != undefined && result.children.length == 0) result.isLeaf = true;
     return result;
   }
 

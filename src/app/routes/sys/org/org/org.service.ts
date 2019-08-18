@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { NzTreeNodeOptions } from 'ng-zorro-antd';
 
 @Injectable({
@@ -38,22 +38,25 @@ export class OrgService {
         return this.http.delete(`${this.baseUrl}/${orgCode}`);
     }
 
-    getOrgTreeByParent(parentOrgCode: string = '0'): any[] {
+    getOrgTreeByParent(parentOrgCode: string = '0'): Observable<any[]> {
         let nodes = [];
-        this.getChildren(parentOrgCode).subscribe((data: any) => {
-            data.list.children.forEach((item: any) => {
-                nodes.push({ title: item.orgName, key: item.orgCode })
-            });
+        var subject = new Subject<any[]>();
+        this.getChildren(parentOrgCode).subscribe((ret: any) => {
+          let children = ret.data;
+          children.forEach((item: any) => {
+            nodes.push({ title: item.orgName, key: item.orgCode })
+          });
+          subject.next(nodes);
         });
-        return nodes;
-    }
+        return  subject.asObservable();;
+      }
 
     //广度优先生成树
     genTree(orgCode: string, data: [any]) {
         let nodes = [...data];
         let node = nodes.find(w => w.orgCode === orgCode);
         let children = nodes.filter(w => (w.parentOrgCode === orgCode));
-        if (children.length > 0) {
+        if (children != undefined && children.length > 0) {
             node.children = [...children];
             node.children.forEach((item: any) => this.genTree(item.orgCode, data));
         }
