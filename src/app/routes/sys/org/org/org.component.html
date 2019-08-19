@@ -4,6 +4,7 @@
   </ng-template>
 </page-header>
 <nz-card>
+  <!-- <nz-spin *ngIf="!listOfMapData" class="modal-spin"></nz-spin> -->
   <!-- <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf> -->
   <nz-table #table [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
