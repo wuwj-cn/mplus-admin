@@ -11,7 +11,7 @@ export interface TreeNode {
   orgCode: string;
   orgName: string;
   fullName: string;
-  status: string;
+  dataStatus: string;
   level: number;
   expand: boolean;
   children?: TreeNode[];
@@ -22,7 +22,7 @@ export interface TreeNode {
   templateUrl: './org.component.html',
 })
 export class SysOrgComponent implements OnInit {
-  status = [
+  dataStatus = [
     { value: '0', label: '正常', type: 'success' },
     { value: '1', label: '删除', type: 'error' },
     { value: '2', label: '停用', type: 'warning' }

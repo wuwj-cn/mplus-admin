@@ -32,9 +32,9 @@ export class SysOrgUserEditComponent implements OnInit {
     },
     $orgCode: {
       widget: 'tree-select', 
-      asyncData: () => of(this.orgService.getOrgTreeByParent()).pipe(delay(300)),
+      asyncData: () => this.orgService.getOrgTreeByParent(),
       expandChange: (e: NzFormatEmitEvent) => {
-        return of(this.orgService.getOrgTreeByParent(e.node.key)).pipe(delay(300));
+        return this.orgService.getOrgTreeByParent(e.node.key);
       }
     },
     $remark: {

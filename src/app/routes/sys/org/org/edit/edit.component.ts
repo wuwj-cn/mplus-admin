@@ -3,8 +3,6 @@ import { NzModalRef, NzMessageService, NzFormatEmitEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema, SFComponent } from '@delon/form';
 import { OrgService } from '../org.service';
-import { of, Subject, Observable } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sys-org-org-edit',
@@ -14,7 +12,7 @@ export class SysOrgOrgEditComponent implements OnInit {
   @ViewChild('sf', { static: false }) sf: SFComponent;
   @Input() record: any;
   i: any;
-  status = [
+  dataStatus = [
     { value: '0', label: '正常', type: 'success' },
     { value: '1', label: '删除', type: 'error' },
     { value: '2', label: '停用', type: 'warning' }
@@ -26,7 +24,7 @@ export class SysOrgOrgEditComponent implements OnInit {
       orgCode: { type: 'string', title: '机构编码' },
       orgName: { type: 'string', title: '机构名称' },
       fullName: { type: 'string', title: '机构全称' },
-      status: { type: 'string', title: '状态', enum: this.status, default: '0', ui: { widget: 'select'} },
+      dataStatus: { type: 'string', title: '状态', enum: this.dataStatus, default: '0', ui: { widget: 'select'} },
       remark: { type: 'string', title: '备注' },
     },
     required: ['orgCode', 'orgName'],
@@ -38,9 +36,9 @@ export class SysOrgOrgEditComponent implements OnInit {
     },
     $parentOrgCode: {
       widget: 'tree-select', 
-      asyncData: () => this.getOrgTree(),
+      asyncData: () => this.orgService.getOrgTreeByParent(),
       expandChange: (e: NzFormatEmitEvent) => {
-        return this.getOrgTree(e.node.key);
+        return this.orgService.getOrgTreeByParent(e.node.key);
       }
     },
     $remark: {
@@ -67,19 +65,6 @@ export class SysOrgOrgEditComponent implements OnInit {
     } else {
       this.i = {};
     }
-  }
-
-  getOrgTree(orgCode: string = '0'): Observable<any[]> {
-    let nodes = [];
-    var subject = new Subject<any[]>();
-    this.orgService.getChildren(orgCode).subscribe((ret: any) => {
-      let children = ret.data;
-      children.forEach((item: any) => {
-        nodes.push({ title: item.orgName, key: item.orgCode })
-      });
-      subject.next(nodes);
-    });
-    return  subject.asObservable();;
   }
 
   save(value: any) {
